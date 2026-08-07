@@ -1,0 +1,373 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>IMMOLEAD · Diagnostic secteur</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#071A11; --panel:#0C2418; --card:#113020; --line:rgba(188,154,80,.20);
+  --gold:#BC9A50; --champagne:#E7D19A; --ivory:#EDE7D6; --muted:#8FA79A;
+  --up:#5FB98A; --down:#D9A441; --alert:#C97B5A;
+  --serif:'Cormorant Garamond',Georgia,serif;
+  --sans:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;
+  --mono:'IBM Plex Mono',ui-monospace,monospace;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ivory);font-family:var(--sans);
+  font-size:15px;line-height:1.5;-webkit-font-smoothing:antialiased}
+.wrap{max-width:1000px;margin:0 auto;padding:0 24px 90px}
+
+/* ---- barre de contrôle ---- */
+.bar{position:sticky;top:0;z-index:10;background:rgba(7,26,17,.94);
+  backdrop-filter:blur(10px);border-bottom:1px solid var(--line);margin-bottom:38px}
+.bar-in{max-width:1000px;margin:0 auto;padding:16px 24px;
+  display:flex;gap:26px;align-items:flex-end;flex-wrap:wrap}
+.brand{font-family:var(--serif);font-size:19px;letter-spacing:.16em;color:var(--gold);
+  padding-bottom:9px;white-space:nowrap}
+.ctrl{display:flex;flex-direction:column;gap:6px}
+.ctrl label{font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+input[type=text]{background:var(--card);border:1px solid var(--line);border-radius:8px;
+  padding:9px 12px;color:var(--ivory);font-family:var(--mono);font-size:16px;width:110px}
+input:focus{outline:none;border-color:var(--gold)}
+.chips{display:flex;gap:5px}
+.chips button{background:var(--card);border:1px solid var(--line);color:var(--ivory);
+  padding:9px 13px;border-radius:8px;font-family:var(--mono);font-size:14px;cursor:pointer;
+  transition:.15s}
+.chips button:hover{border-color:var(--gold)}
+.chips button[aria-pressed=true]{background:var(--gold);color:#071A11;border-color:var(--gold);font-weight:600}
+.go{background:var(--gold);color:#071A11;border:0;border-radius:8px;padding:10px 20px;
+  font-family:var(--sans);font-size:14px;font-weight:600;cursor:pointer}
+.go:disabled{opacity:.45;cursor:default}
+
+/* ---- verdict ---- */
+.eyebrow{font-size:10.5px;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);
+  display:flex;align-items:center;gap:10px;margin-bottom:14px}
+.eyebrow::after{content:"";flex:1;height:1px;background:var(--line)}
+.verdict{font-family:var(--serif);font-size:clamp(27px,4.4vw,44px);line-height:1.18;
+  font-weight:400;margin:0 0 14px;max-width:24ch}
+.verdict b{color:var(--champagne);font-weight:600}
+.verdict .miss{color:var(--gold)}
+.sub{color:var(--muted);font-size:14.5px;max-width:60ch;margin:0}
+
+/* ---- échelle des rayons (élément signature) ---- */
+.ladder{margin:44px 0 0;border-top:1px solid var(--line)}
+.rung{display:grid;grid-template-columns:74px 1fr 128px;align-items:center;gap:18px;
+  padding:15px 0;border-bottom:1px solid var(--line);cursor:pointer;transition:.15s}
+.rung:hover{background:rgba(188,154,80,.045)}
+.rung[aria-current=true] .r-km{color:var(--champagne)}
+.rung[aria-current=true] .r-bar i{background:var(--gold)}
+.r-km{font-family:var(--mono);font-size:19px;color:var(--muted);transition:.15s}
+.r-bar{position:relative;height:5px;background:rgba(255,255,255,.05);border-radius:3px}
+.r-bar i{position:absolute;inset:0 auto 0 0;background:var(--muted);border-radius:3px;
+  width:0;transition:width .55s cubic-bezier(.2,.8,.2,1)}
+.r-val{font-family:var(--mono);font-size:15px;text-align:right;color:var(--ivory);white-space:nowrap}
+.r-val em{color:var(--muted);font-style:normal;font-size:12.5px;display:block;margin-top:2px}
+.r-pending{color:var(--muted);font-size:12.5px;font-family:var(--sans)}
+
+/* ---- chiffres ---- */
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(178px,1fr));gap:1px;
+  background:var(--line);border:1px solid var(--line);border-radius:12px;overflow:hidden;margin-top:40px}
+.cell{background:var(--panel);padding:19px 18px}
+.cell dt{font-size:10.5px;letter-spacing:.13em;text-transform:uppercase;color:var(--muted);margin-bottom:9px}
+.cell dd{margin:0;font-family:var(--mono);font-size:23px;color:var(--champagne);font-weight:500}
+.cell dd small{font-size:13px;color:var(--muted);font-weight:400;display:block;margin-top:4px;font-family:var(--sans)}
+.cell.trend dd{font-size:19px}
+.up{color:var(--up)} .down{color:var(--down)}
+
+.villes{margin-top:34px}
+.villes h3{font-family:var(--serif);font-size:21px;font-weight:500;margin:0 0 14px}
+.villes ul{list-style:none;padding:0;margin:0;display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:9px}
+.villes li{background:var(--panel);border:1px solid var(--line);border-radius:9px;
+  padding:12px 15px;display:flex;justify-content:space-between;align-items:baseline;gap:12px}
+.villes span{color:var(--muted);font-size:14px}
+.villes b{font-family:var(--mono);color:var(--champagne);font-weight:500}
+
+.foot{margin-top:44px;padding-top:22px;border-top:1px solid var(--line);
+  display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap;align-items:flex-start}
+.src{font-size:12.5px;color:var(--muted);max-width:62ch;line-height:1.55}
+.copy{background:transparent;border:1px solid var(--line);color:var(--champagne);
+  border-radius:8px;padding:10px 17px;font-size:13.5px;font-family:var(--sans);cursor:pointer;white-space:nowrap}
+.copy:hover{border-color:var(--gold)}
+
+.msg{padding:26px 0;color:var(--muted);font-size:15px}
+.msg.err{color:var(--alert)}
+.pulse{display:inline-block;width:6px;height:6px;border-radius:50%;background:var(--gold);
+  margin-right:9px;animation:p 1.1s ease-in-out infinite}
+@keyframes p{0%,100%{opacity:.25}50%{opacity:1}}
+.hidden{display:none}
+
+@media (max-width:620px){
+  .bar-in{gap:16px}
+  .rung{grid-template-columns:56px 1fr;row-gap:6px}
+  .r-val{grid-column:2;text-align:left}
+}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+@media print{
+  body{background:#fff;color:#111}
+  .bar,.copy{display:none}
+  .cell,.villes li{background:#fff}
+  .verdict b,.cell dd,.villes b{color:#8a6d2f}
+}
+</style>
+</head>
+<body>
+
+<div class="bar">
+  <div class="bar-in">
+    <div class="brand">IMMOLEAD</div>
+    <div class="ctrl">
+      <label for="cp">Code postal</label>
+      <input id="cp" type="text" inputmode="numeric" maxlength="5" placeholder="61450" value="">
+    </div>
+    <div class="ctrl">
+      <label>Rayon d'intervention</label>
+      <div class="chips" id="chips"></div>
+    </div>
+    <div class="ctrl">
+      <label for="mandats">Mandats / mois</label>
+      <input id="mandats" type="text" inputmode="numeric" maxlength="2" placeholder="2" value="" style="width:74px">
+    </div>
+    <button class="go" id="go">Analyser</button>
+  </div>
+</div>
+
+<div class="wrap">
+  <div id="msg" class="msg">Saisissez le code postal de l'agent, son rayon d'intervention et son nombre de mandats mensuels.</div>
+
+  <section id="out" class="hidden">
+    <div class="eyebrow" id="eyebrow">Secteur</div>
+    <h1 class="verdict" id="verdict"></h1>
+    <p class="sub" id="sub"></p>
+
+    <div class="ladder" id="ladder"></div>
+
+    <dl class="grid" id="grid"></dl>
+
+    <div class="villes hidden" id="villes">
+      <h3>Communes les plus actives du secteur</h3>
+      <ul id="villesList"></ul>
+    </div>
+
+    <div class="foot">
+      <p class="src" id="src"></p>
+      <button class="copy" id="copy">Copier le résumé</button>
+    </div>
+  </section>
+</div>
+
+<script>
+var RAYONS=[10,20,30,50];
+var state={cp:'',rayon:30,mandats:null,data:null,cache:{}};
+
+/* ---------- utilitaires ---------- */
+function n(v){try{return Number(v).toLocaleString('fr-FR').replace(/\u00A0/g,' ')}catch(e){return String(v)}}
+function pct(p){return p<1?'moins de 1 %':(p<10?p.toFixed(1).replace('.',',')+' %':Math.round(p)+' %')}
+function el(id){return document.getElementById(id)}
+
+/* ---------- barre de rayons ---------- */
+(function(){
+  var c=el('chips');
+  RAYONS.forEach(function(r){
+    var b=document.createElement('button');
+    b.textContent=r+' km'; b.dataset.r=r;
+    b.setAttribute('aria-pressed', r===state.rayon);
+    b.onclick=function(){ setRayon(r); if(state.cp) analyser(); };
+    c.appendChild(b);
+  });
+})();
+function setRayon(r){
+  state.rayon=r;
+  [].forEach.call(el('chips').children,function(b){
+    b.setAttribute('aria-pressed', Number(b.dataset.r)===r);
+  });
+}
+
+/* ---------- appel de la fonction marché ---------- */
+function charger(cp,rayon){
+  var cle=cp+'-'+rayon;
+  if(state.cache[cle]) return Promise.resolve(state.cache[cle]);
+  var ctrl=new AbortController();
+  var to=setTimeout(function(){ctrl.abort()},25000);
+  return fetch('/.netlify/functions/market?cp='+cp+'&r='+rayon,{signal:ctrl.signal})
+    .then(function(r){clearTimeout(to); if(!r.ok) throw new Error('HTTP '+r.status); return r.json()})
+    .then(function(j){ state.cache[cle]=j; return j; });
+}
+
+/* ---------- part de marché ---------- */
+function part(m,mandats){
+  if(!m||m.panneau===false||!mandats) return null;
+  var nb=Number(m.nb_ventes||0);
+  if(nb<25) return null;
+  var an=mandats*12;
+  if(an>=nb) return null;
+  return {annuels:an,pct:an/nb*100,reste:nb-an,ventes:nb};
+}
+
+/* ---------- rendu ---------- */
+function analyser(){
+  var cp=el('cp').value.trim();
+  var md=parseInt(el('mandats').value,10);
+  if(!/^\d{5}$/.test(cp)){ montrer('Un code postal à 5 chiffres est attendu.',true); return; }
+  state.cp=cp; state.mandats=(isNaN(md)||md<0)?null:md;
+
+  el('go').disabled=true;
+  montrer('<span class="pulse"></span>Lecture des ventes du département…');
+
+  charger(cp,state.rayon).then(function(m){
+    state.data=m;
+    el('go').disabled=false;
+    if(m.couvert===false){ horsPerimetre(cp); return; }
+    if(m.panneau===false){ montrer('Aucune vente exploitable sur ce secteur. Élargissez le rayon.',true); return; }
+    afficher(m);
+    remplirEchelle();
+  }).catch(function(e){
+    el('go').disabled=false;
+    montrer('La lecture a échoué ('+e.message+'). Réessayez dans un instant.',true);
+  });
+}
+
+function montrer(html,err){
+  el('out').classList.add('hidden');
+  var m=el('msg'); m.className='msg'+(err?' err':''); m.innerHTML=html; m.classList.remove('hidden');
+}
+
+function horsPerimetre(cp){
+  el('msg').classList.add('hidden');
+  el('out').classList.remove('hidden');
+  el('eyebrow').textContent='Secteur '+cp;
+  el('verdict').innerHTML='Aucune donnée publique sur <b>ce département</b>';
+  el('sub').textContent="Les ventes y sont enregistrées au livre foncier (droit local alsacien-mosellan) et ne figurent dans aucune base ouverte — ni pour vous, ni pour vos concurrents. À travailler à partir des chiffres de l'agent.";
+  el('ladder').innerHTML=''; el('grid').innerHTML=''; el('villes').classList.add('hidden');
+  el('src').textContent='Base DVF (Demandes de valeurs foncières), DGFiP.';
+}
+
+function afficher(m){
+  el('msg').classList.add('hidden');
+  el('out').classList.remove('hidden');
+
+  var lieu=m.commune_centre||('secteur '+m.code_postal);
+  el('eyebrow').textContent=m.code_postal+' · '+m.rayon_km+' km autour de '+lieu
+    +(m.nb_communes>1?' · '+m.nb_communes+' communes':'');
+
+  var p=part(m,state.mandats);
+  if(p){
+    el('verdict').innerHTML='Il reste <span class="miss">'+n(p.reste)+' ventes</span><br>hors de son périmètre';
+    el('sub').innerHTML='Sur '+n(p.ventes)+' biens vendus '+(m.periode||'')+', il en accompagne environ <b>'
+      +n(p.annuels)+'</b> — soit '+pct(p.pct)+' du volume de son propre secteur.';
+  }else{
+    el('verdict').innerHTML='<b>'+n(m.nb_ventes)+'</b> ventes<br>sur son secteur';
+    el('sub').textContent=state.mandats
+      ? 'Volume insuffisant pour un ratio significatif à ce rayon, ou nombre de mandats supérieur au marché local. Élargissez le rayon.'
+      : 'Renseignez son nombre de mandats mensuels pour calculer sa part.';
+  }
+
+  /* chiffres clés */
+  var cells=[];
+  if(m.prix_median) cells.push(['Prix médian',n(m.prix_median)+' €','']);
+  if(m.prix_m2_median) cells.push(['Prix au m²',n(m.prix_m2_median)+' €','']);
+  if(m.prix_p25&&m.prix_p75) cells.push(['Moitié des ventes',n(m.prix_p25)+' – '+n(m.prix_p75),'euros']);
+  if(typeof m.part_maisons==='number') cells.push(['Maisons',m.part_maisons+' %','appartements '+(100-m.part_maisons)+' %']);
+  var g='';
+  cells.forEach(function(c){
+    g+='<div class="cell"><dt>'+c[0]+'</dt><dd>'+c[1]+(c[2]?'<small>'+c[2]+'</small>':'')+'</dd></div>';
+  });
+  if(typeof m.evolution_prix_pct==='number'){
+    var pc=m.evolution_prix_pct, vc=m.evolution_volume_pct;
+    g+='<div class="cell trend"><dt>Depuis '+m.annee_ref+'</dt><dd>'
+      +'<span class="'+(pc>=0?'up':'down')+'">'+(pc>0?'+':'')+pc+' %</span> prix'
+      +(typeof vc==='number'?'<small><span class="'+(vc>=0?'up':'down')+'">'+(vc>0?'+':'')+vc+' %</span> de ventes</small>':'')
+      +'</dd></div>';
+  }
+  el('grid').innerHTML=g;
+
+  /* communes */
+  if(m.voisines&&m.voisines.length){
+    el('villes').classList.remove('hidden');
+    el('villesList').innerHTML=m.voisines.map(function(v){
+      return '<li><span>'+v.nom+'</span><b>'+n(v.prix_median)+' €</b></li>';
+    }).join('');
+  }else{ el('villes').classList.add('hidden'); }
+
+  el('src').textContent='Base DVF (Demandes de valeurs foncières), DGFiP — données publiques, '
+    +(m.periode||'')+', publiées deux fois par an avec environ six mois de décalage. '
+    +'La base recense toutes les ventes, y compris de particulier à particulier ; un mandat rentré n\'aboutit pas systématiquement à une vente. '
+    +'Le périmètre s\'arrête aux limites du département.';
+}
+
+/* ---------- échelle des rayons ---------- */
+function remplirEchelle(){
+  var L=el('ladder');
+  L.innerHTML=RAYONS.map(function(r){
+    return '<div class="rung" data-r="'+r+'" aria-current="'+(r===state.rayon)+'">'
+      + '<div class="r-km">'+r+' km</div>'
+      + '<div class="r-bar"><i></i></div>'
+      + '<div class="r-val" id="rv'+r+'"><span class="r-pending">…</span></div>'
+      + '</div>';
+  }).join('');
+  [].forEach.call(L.children,function(d){
+    d.onclick=function(){ setRayon(Number(d.dataset.r)); analyser(); };
+  });
+
+  var max=0, res={};
+  Promise.all(RAYONS.map(function(r){
+    return charger(state.cp,r).then(function(m){
+      res[r]=m; max=Math.max(max,Number(m.nb_ventes||0));
+    }).catch(function(){ res[r]=null; });
+  })).then(function(){
+    RAYONS.forEach(function(r){
+      var m=res[r], box=el('rv'+r), bar=L.querySelector('[data-r="'+r+'"] .r-bar i');
+      if(!m||m.panneau===false){ box.innerHTML='<span class="r-pending">—</span>'; return; }
+      var nb=Number(m.nb_ventes||0);
+      if(bar&&max) bar.style.width=Math.max(2,nb/max*100)+'%';
+      var p=part(m,state.mandats);
+      box.innerHTML = p
+        ? '<b>'+pct(p.pct)+'</b><em>'+n(nb)+' ventes</em>'
+        : n(nb)+' ventes';
+    });
+  });
+}
+
+/* ---------- résumé copiable ---------- */
+el('copy').onclick=function(){
+  var m=state.data; if(!m) return;
+  var p=part(m,state.mandats), L=[];
+  L.push('Secteur '+m.code_postal+' — rayon '+m.rayon_km+' km autour de '+(m.commune_centre||'')
+    +(m.nb_communes>1?' ('+m.nb_communes+' communes)':''));
+  L.push(n(m.nb_ventes)+' biens vendus '+(m.periode||''));
+  if(m.prix_median) L.push('Prix médian : '+n(m.prix_median)+' €');
+  if(m.prix_m2_median) L.push('Prix au m² : '+n(m.prix_m2_median)+' €');
+  if(typeof m.evolution_prix_pct==='number')
+    L.push('Depuis '+m.annee_ref+' : prix '+(m.evolution_prix_pct>0?'+':'')+m.evolution_prix_pct
+      +' %, ventes '+(m.evolution_volume_pct>0?'+':'')+m.evolution_volume_pct+' %');
+  if(p) L.push('À '+state.mandats+' mandat(s)/mois : environ '+n(p.annuels)+' par an, soit '
+    +pct(p.pct)+'. Restent '+n(p.reste)+' ventes hors périmètre.');
+  L.push('Source : base DVF, DGFiP — données publiques.');
+  var t=L.join('\n');
+  navigator.clipboard.writeText(t).then(function(){
+    var b=el('copy'), old=b.textContent;
+    b.textContent='Résumé copié'; setTimeout(function(){b.textContent=old},1800);
+  });
+};
+
+/* ---------- raccourcis ---------- */
+el('go').onclick=analyser;
+['cp','mandats'].forEach(function(id){
+  el(id).oninput=function(){ this.value=this.value.replace(/\D/g,''); };
+  el(id).onkeydown=function(e){ if(e.key==='Enter') analyser(); };
+});
+el('mandats').addEventListener('input',function(){
+  if(!state.data) return;
+  var md=parseInt(el('mandats').value,10);
+  state.mandats=(isNaN(md)||md<0)?null:md;
+  afficher(state.data);
+  remplirEchelle();
+});
+</script>
+</body>
+</html>
