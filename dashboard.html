@@ -1,0 +1,327 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>IMMOLEAD · Pilotage</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#071A11; --panel:#0C2418; --card:#113020; --line:rgba(188,154,80,.20);
+  --gold:#BC9A50; --champagne:#E7D19A; --ivory:#EDE7D6; --muted:#8FA79A;
+  --up:#5FB98A; --down:#D9A441; --alert:#C97B5A;
+  --serif:'Cormorant Garamond',Georgia,serif;
+  --sans:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;
+  --mono:'IBM Plex Mono',ui-monospace,monospace;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ivory);font-family:var(--sans);
+  font-size:15px;line-height:1.5;-webkit-font-smoothing:antialiased}
+.wrap{max-width:1180px;margin:0 auto;padding:0 24px 80px}
+
+/* ---- accès ---- */
+.porte{max-width:380px;margin:0 auto;padding:110px 24px}
+.porte .logo{font-family:var(--serif);font-size:20px;letter-spacing:.2em;color:var(--gold);margin-bottom:34px}
+.porte h1{font-family:var(--serif);font-size:30px;font-weight:400;margin:0 0 8px}
+.porte p{color:var(--muted);font-size:14px;margin:0 0 24px}
+.porte input{width:100%;background:var(--card);border:1px solid var(--line);border-radius:10px;
+  padding:13px 15px;color:var(--ivory);font-family:var(--mono);font-size:16px}
+.porte input:focus{outline:none;border-color:var(--gold)}
+.porte button{width:100%;margin-top:12px;background:var(--gold);color:#071A11;border:0;
+  border-radius:10px;padding:14px;font-family:var(--sans);font-size:15px;font-weight:600;cursor:pointer}
+.porte button:disabled{opacity:.5;cursor:default}
+.porte .err{color:var(--alert);font-size:13.5px;margin-top:12px;min-height:20px}
+
+/* ---- barre ---- */
+.bar{position:sticky;top:0;z-index:10;background:rgba(7,26,17,.94);backdrop-filter:blur(10px);
+  border-bottom:1px solid var(--line);margin-bottom:34px}
+.bar-in{max-width:1180px;margin:0 auto;padding:15px 24px;display:flex;align-items:center;
+  justify-content:space-between;gap:16px;flex-wrap:wrap}
+.brand{font-family:var(--serif);font-size:19px;letter-spacing:.18em;color:var(--gold)}
+.bar-act{display:flex;gap:9px;align-items:center}
+.maj{font-size:12px;color:var(--muted);font-family:var(--mono)}
+.mini-btn{background:transparent;border:1px solid var(--line);color:var(--champagne);border-radius:8px;
+  padding:8px 14px;font-size:13px;font-family:var(--sans);cursor:pointer}
+.mini-btn:hover{border-color:var(--gold)}
+
+/* ---- synthèse ---- */
+.eyebrow{font-size:10.5px;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);
+  display:flex;align-items:center;gap:10px;margin:0 0 16px}
+.eyebrow::after{content:"";flex:1;height:1px;background:var(--line)}
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(186px,1fr));gap:1px;
+  background:var(--line);border:1px solid var(--line);border-radius:12px;overflow:hidden}
+.kpi{background:var(--panel);padding:20px}
+.kpi dt{font-size:10.5px;letter-spacing:.13em;text-transform:uppercase;color:var(--muted);margin-bottom:9px}
+.kpi dd{margin:0;font-family:var(--mono);font-size:27px;color:var(--champagne);font-weight:500;line-height:1.1}
+.kpi dd small{display:block;font-family:var(--sans);font-size:12.5px;color:var(--muted);
+  font-weight:400;margin-top:6px;line-height:1.45}
+.kpi.fort dd{color:var(--gold);font-size:31px}
+.kpi.souci dd{color:var(--alert)}
+
+/* ---- histogramme ---- */
+.hist{margin-top:40px}
+.bars{display:flex;align-items:flex-end;gap:6px;height:130px;padding-top:10px}
+.bcol{flex:1;display:flex;flex-direction:column;justify-content:flex-end;align-items:center;gap:7px;min-width:0}
+.bcol i{display:block;width:100%;background:linear-gradient(180deg,var(--gold),rgba(188,154,80,.35));
+  border-radius:4px 4px 0 0;min-height:3px;transition:height .5s cubic-bezier(.2,.8,.2,1)}
+.bcol b{font-family:var(--mono);font-size:11px;color:var(--champagne);font-weight:500;white-space:nowrap}
+.bcol span{font-size:10.5px;color:var(--muted);font-family:var(--mono);white-space:nowrap}
+
+/* ---- clients ---- */
+.tbl{margin-top:42px;border:1px solid var(--line);border-radius:12px;overflow:hidden}
+.trow{display:grid;grid-template-columns:minmax(170px,1.6fr) 78px 82px 112px 96px 80px 62px 76px;
+  gap:14px;padding:15px 18px;border-bottom:1px solid var(--line);align-items:center}
+.trow:last-child{border-bottom:0}
+.thead{background:var(--panel);font-size:10px;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--muted);align-items:end}
+.thead > div{white-space:nowrap;line-height:1.3}
+.trow .nom{font-size:15px;color:var(--ivory)}
+.trow .nom em{display:block;font-style:normal;font-size:12.5px;color:var(--muted);margin-top:3px}
+.trow .num{font-family:var(--mono);font-size:12.5px;text-align:right;color:var(--champagne);
+  font-variant-numeric:tabular-nums;white-space:nowrap}
+.trow .num.pale{color:var(--muted)}
+.pastille{display:inline-block;font-size:11.5px;padding:3px 9px;border-radius:100px;white-space:nowrap}
+.p-actif{background:rgba(95,185,138,.12);border:1px solid rgba(95,185,138,.4);color:var(--up)}
+.p-souci{background:rgba(201,123,90,.12);border:1px solid rgba(201,123,90,.4);color:var(--alert)}
+.p-neutre{background:rgba(255,255,255,.04);border:1px solid var(--line);color:var(--muted)}
+.evo{font-family:var(--mono);font-size:14px;text-align:right}
+.evo.up{color:var(--up)} .evo.down{color:var(--down)} .evo.nul{color:var(--muted)}
+.cid{font-family:var(--mono);font-size:11.5px;color:var(--champagne);user-select:all}
+.cumul{color:var(--champagne)}
+.marge{color:var(--up)}
+.marge.pale{color:var(--muted)}
+.marge em{display:block;font-style:normal;font-size:11px;color:var(--alert);margin-top:2px;font-family:var(--sans)}
+.cumul em{display:block;font-style:normal;font-size:11px;color:var(--muted);margin-top:2px;font-family:var(--sans)}
+.rat{display:inline-block;font-family:var(--mono);font-size:10px;letter-spacing:.06em;
+  padding:1px 6px;border-radius:5px;vertical-align:middle;margin-left:7px}
+.rat.ok{background:rgba(95,185,138,.14);color:var(--up);border:1px solid rgba(95,185,138,.3)}
+.rat.faible{background:rgba(201,123,90,.14);color:var(--alert);border:1px solid rgba(201,123,90,.3)}
+.alertes{grid-column:1/-1;margin-top:4px;font-size:12.5px;color:var(--alert);line-height:1.5}
+
+.vide{padding:40px 18px;text-align:center;color:var(--muted);font-size:14px}
+.note{margin-top:34px;padding:16px 18px;background:var(--panel);border:1px solid var(--line);
+  border-radius:12px;font-size:13px;color:var(--muted);line-height:1.6}
+.note b{color:var(--champagne);font-weight:500}
+.hidden{display:none}
+@media(max-width:980px){
+  .trow{grid-template-columns:minmax(130px,1fr) 96px 88px 120px 72px;gap:10px}
+  .trow .c-hide{display:none}
+}
+@media(max-width:680px){
+  .trow{grid-template-columns:minmax(110px,1fr) 116px 68px;gap:10px;row-gap:6px;padding:14px}
+  .trow .c-hide,.trow .m-hide{display:none}
+  .trow .nom{font-size:14px}
+  .trow .num{font-size:12px}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+
+<!-- ACCÈS -->
+<section class="porte" id="porte">
+  <div class="logo">IMMOLEAD</div>
+  <h1>Pilotage</h1>
+  <p>Cette page n'est pas publique. Saisissez votre phrase d'accès.</p>
+  <input id="cle" type="password" placeholder="Phrase d'accès" autocomplete="current-password">
+  <button id="entrer">Ouvrir</button>
+  <p class="err" id="errCle"></p>
+</section>
+
+<!-- TABLEAU DE BORD -->
+<div id="board" class="hidden">
+  <div class="bar"><div class="bar-in">
+    <div class="brand">IMMOLEAD · PILOTAGE</div>
+    <div class="bar-act">
+      <span class="maj" id="maj"></span>
+      <button class="mini-btn" id="refresh">Actualiser</button>
+      <button class="mini-btn" id="sortir">Fermer</button>
+    </div>
+  </div></div>
+
+  <div class="wrap">
+    <div class="eyebrow">Ce mois-ci</div>
+    <dl class="kpis" id="kpis"></dl>
+
+    <div class="hist" id="hist"></div>
+
+    <div class="eyebrow" style="margin-top:44px">Vos clients</div>
+    <div class="tbl" id="tbl"></div>
+
+    <div id="orphelins"></div>
+
+    <div class="note">
+      <b>Ce que cette page ne peut pas calculer.</b> Le coût par lead nécessiterait les dépenses publicitaires de chaque client, qui restent sur leurs propres comptes Meta. Aucun outil ne peut les récupérer sans un accès individuel à chaque compte.<br><br>
+      Le rapprochement entre Stripe et Supabase se fait en trois temps : d'abord la colonne <b>stripe_customer_id</b> de la table clients, puis l'email, enfin le nom. Les deux premiers sont fiables ; le rapprochement par nom échoue dès qu'une orthographe diffère, et il est signalé pour que vous puissiez renseigner l'identifiant.
+    </div>
+  </div>
+</div>
+
+<script>
+var CLE_SESSION='immolead_dash';
+
+function el(id){return document.getElementById(id)}
+function eur(n){try{return Math.round(n).toLocaleString('fr-FR').replace(/\u00A0/g,' ')+' €'}catch(e){return n+' €'}}
+function nb(n){try{return Math.round(n).toLocaleString('fr-FR').replace(/\u00A0/g,' ')}catch(e){return String(n)}}
+function dateFr(t){ if(!t) return '—';
+  try{ return new Date(t).toLocaleDateString('fr-FR',{day:'numeric',month:'short'}); }catch(e){ return '—'; } }
+function moisFr(cle){
+  var M=['jan','fév','mar','avr','mai','juin','juil','août','sep','oct','nov','déc'];
+  var p=cle.split('-'); return M[parseInt(p[1],10)-1]+' '+p[0].slice(2);
+}
+
+/* ---------- accès ---------- */
+function ouvrir(cle){
+  el('entrer').disabled=true; el('errCle').textContent='Vérification…';
+  return fetch('/.netlify/functions/dashboard',{headers:{'x-dash-token':cle}})
+    .then(function(r){
+      if(r.status===401) throw new Error('Phrase d\'accès incorrecte.');
+      if(!r.ok) throw new Error('Erreur serveur ('+r.status+').');
+      return r.json();
+    })
+    .then(function(d){
+      try{ sessionStorage.setItem(CLE_SESSION,cle); }catch(e){}
+      el('porte').classList.add('hidden');
+      el('board').classList.remove('hidden');
+      afficher(d);
+    })
+    .catch(function(e){
+      el('entrer').disabled=false;
+      el('errCle').textContent=e.message;
+      throw e;
+    });
+}
+
+el('entrer').onclick=function(){ var v=el('cle').value.trim(); if(v) ouvrir(v).catch(function(){}); };
+el('cle').onkeydown=function(e){ if(e.key==='Enter') el('entrer').click(); };
+el('refresh').onclick=function(){
+  var c=sessionStorage.getItem(CLE_SESSION); if(!c) return;
+  el('refresh').textContent='…';
+  fetch('/.netlify/functions/dashboard',{headers:{'x-dash-token':c}})
+    .then(function(r){return r.json()})
+    .then(function(d){ afficher(d); el('refresh').textContent='Actualiser'; })
+    .catch(function(){ el('refresh').textContent='Actualiser'; });
+};
+el('sortir').onclick=function(){
+  try{ sessionStorage.removeItem(CLE_SESSION); }catch(e){}
+  location.reload();
+};
+
+/* reprise de session */
+(function(){
+  var c=null; try{ c=sessionStorage.getItem(CLE_SESSION); }catch(e){}
+  if(c) ouvrir(c).catch(function(){ try{sessionStorage.removeItem(CLE_SESSION);}catch(e){} });
+})();
+
+/* ---------- rendu ---------- */
+function afficher(d){
+  var s=d.synthese||{};
+  el('maj').textContent='màj '+new Date(d.genere_le).toLocaleTimeString('fr-FR',{hour:'2-digit',minute:'2-digit'});
+
+  el('kpis').innerHTML =
+    kpi('Revenu mensuel récurrent', eur(s.mrr), s.abonnements_actifs+' abonnement'+(s.abonnements_actifs>1?'s':'')+' actif'+(s.abonnements_actifs>1?'s':''), 'fort')
+  + kpi('MRR net', eur(s.mrr_net), eur(s.cout_mensuel_equipe)+' de média buying déduits', 'fort')
+  + kpi('Encaissé ce mois', eur(s.ca_mois), '')
+  + kpi('Encaissé depuis le début', eur(s.ca_depuis_debut), s.panier_moyen ? eur(s.panier_moyen)+' par client en moyenne' : '')
+  + kpi('Marge cumulée', eur(s.marge_cumulee), eur(s.couts_cumules)+' de commissions versées')
+  + kpi('Clients', nb(s.clients), s.abonnements_actifs+' avec un abonnement en cours')
+  + kpi('Leads livrés sur 30 j', nb(s.leads_30j), s.leads_moyen_par_client+' par client en moyenne')
+  + kpi('Leads livrés au total', nb(s.leads_total), '')
+  + (s.paiements_en_echec>0 ? kpi('Paiements en échec', nb(s.paiements_en_echec), 'à relancer', 'souci') : '');
+
+  /* histogramme */
+  var h=d.historique||[];
+  if(h.length>1){
+    var max=Math.max.apply(null,h.map(function(x){return x.montant}))||1;
+    el('hist').innerHTML='<div class="eyebrow">Encaissements par mois</div><div class="bars">'
+      + h.map(function(x){
+          return '<div class="bcol"><b>'+nb(x.montant)+'</b>'
+               + '<i style="height:'+Math.max(3,x.montant/max*96)+'px"></i>'
+               + '<span>'+moisFr(x.mois)+'</span></div>';
+        }).join('') + '</div>';
+  } else { el('hist').innerHTML=''; }
+
+  /* clients */
+  var cl=d.clients||[];
+  if(!cl.length){
+    el('tbl').innerHTML='<div class="vide">Aucun client dans Supabase pour le moment.</div>';
+  } else {
+    el('tbl').innerHTML =
+      '<div class="trow thead"><div>Client</div><div class="m-hide">Statut</div>'
+      + '<div class="num m-hide">Abonnement</div><div class="num">Payé à ce jour</div>'
+      + '<div class="num c-hide">Marge</div>'
+      + '<div class="num">Leads 30 j</div>'
+      + '<div class="num c-hide">Total</div><div class="num c-hide">Évolution</div></div>'
+      + cl.map(ligne).join('');
+  }
+
+  /* abonnés Stripe sans fiche */
+  var o=d.orphelins||[];
+  el('orphelins').innerHTML = o.length
+    ? '<div class="eyebrow" style="margin-top:40px">Abonnés Stripe sans fiche Supabase</div>'
+      + '<div class="tbl">'+o.map(function(x){
+          return '<div class="trow"><div class="nom">'+esc(x.nom||'(sans nom)')
+               + '<em>'+(x.email?esc(x.email)+' · ':'')
+               + '<span class="cid">'+esc(x.customer_id||'')+'</span></em></div>'
+               + '<div class="m-hide">'+pastille(x.statut)+'</div>'
+               + '<div class="num m-hide">'+eur(x.mrr)+'</div>'
+               + '<div class="num cumul'+(x.total_paye?'':' pale')+'">'+(x.total_paye?eur(x.total_paye):'—')+'</div>'
+               + '<div class="num pale c-hide">—</div>'
+               + '<div class="num pale">—</div>'
+               + '<div class="num pale c-hide">—</div>'
+               + '<div class="num pale c-hide">—</div></div>';
+        }).join('')+'</div>'
+    : '';
+}
+
+function kpi(t,v,note,cls){
+  return '<div class="kpi'+(cls?' '+cls:'')+'"><dt>'+t+'</dt><dd>'+v
+       + (note?'<small>'+note+'</small>':'')+'</dd></div>';
+}
+
+function ligne(c){
+  var e = c.evolution_pct;
+  var evoTxt = e===null ? '—' : (e>0?'+':'')+e+' %';
+  var evoCls = e===null ? 'nul' : (e>0 ? 'up' : (e<=-40 ? 'down' : 'nul'));
+  return '<div class="trow">'
+    + '<div class="nom">'+esc(c.nom)+lien(c.rattachement)
+      + '<em>dernier lead : '+dateFr(c.dernier_lead)+'</em></div>'
+    + '<div class="m-hide">'+pastille(c.statut)+'</div>'
+    + '<div class="num m-hide'+(c.mrr?'':' pale')+'">'+(c.mrr?eur(c.mrr):'—')+'</div>'
+    + '<div class="num cumul'+(c.total_paye?'':' pale')+'">'+(c.total_paye?eur(c.total_paye):'—')
+      + (c.nb_paiements?'<em>'+c.nb_paiements+' paiement'+(c.nb_paiements>1?'s':'')+'</em>':'')+'</div>'
+    + '<div class="num marge c-hide'+(c.marge?'':' pale')+'">'+(c.total_paye?eur(c.marge):'—')
+      + (c.cout_total?'<em>−'+eur(c.cout_total)+'</em>':'')+'</div>'
+    + '<div class="num">'+nb(c.leads_30j)+'</div>'
+    + '<div class="num pale c-hide">'+nb(c.leads_total)+'</div>'
+    + '<div class="evo '+evoCls+' c-hide">'+evoTxt+'</div>'
+    + (c.alertes && c.alertes.length ? '<div class="alertes">⚠ '+c.alertes.map(esc).join(' · ')+'</div>' : '')
+    + '</div>';
+}
+
+function lien(mode){
+  if(mode==='id')    return ' <span class="rat ok" title="Rapproché par identifiant Stripe">id</span>';
+  if(mode==='email') return ' <span class="rat ok" title="Rapproché par email">email</span>';
+  if(mode==='nom')   return ' <span class="rat faible" title="Rapproché par nom, à fiabiliser">nom</span>';
+  return '';
+}
+function pastille(st){
+  if(!st) return '<span class="pastille p-neutre">sans abonnement</span>';
+  var libelles={active:'actif',trialing:'essai',past_due:'impayé',unpaid:'impayé',
+    incomplete:'incomplet',canceled:'résilié',paused:'en pause'};
+  var cls = st==='active'||st==='trialing' ? 'p-actif'
+          : (['past_due','unpaid','incomplete'].indexOf(st)>-1 ? 'p-souci' : 'p-neutre');
+  return '<span class="pastille '+cls+'">'+(libelles[st]||st)+'</span>';
+}
+
+function esc(s){
+  return String(s==null?'':s).replace(/[&<>"']/g,function(c){
+    return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];
+  });
+}
+</script>
+</body>
+</html>
