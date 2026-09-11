@@ -7,14 +7,14 @@
 window.IMMOLEAD_INFOS = {
   forme:        "EURL",                              // forme juridique
   capital:      "1 000",                             // capital social (sans le €)
-  siege:        "40, Rue Vivienne, 75002, Paris",       // siège social
-  rcsVille:     "Paris",                             // RCS — ex : Thionville
-  siren:        "994 567 121",                        // n° SIREN
+  siege:        "47, Rue Vivienne, 75002, Paris",    // siège social
+  rcsVille:     "Paris",                             // RCS
+  siren:        "107 059 503",                       // n° SIREN
   tva:          "En cours d'attribution",            // TVA intracommunautaire
   email:        "contact@immolead.net",              // email de contact
   telephone:    "06 25 35 44 43",                    // téléphone
   directeur:    "LEJOSNE Simon",                     // directeur de la publication
-  hebergeur:    "Netlify, Inc., 512 2nd Street, Suite 200, San Francisco, CA 94107, États-Unis",
+  hebergeur:    "512 2nd Street, Suite 200, San Francisco, CA 94107, États-Unis", // adresse Netlify (le nom est déjà écrit dans la page)
   preavis:      "30",                                // préavis de résiliation (jours)
   conservation: "3 ans"                              // durée de conservation des données
 };
