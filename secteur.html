@@ -567,7 +567,7 @@ function submitContact(){
       t=document.getElementById('tel').value.trim(),
       e=document.getElementById('email').value.trim(), cp=document.getElementById('cp').value.trim(),
       rgpd=document.getElementById('rgpd').checked;
-  if(!n||t.length<8||e.indexOf('@')<0||cp.length<5||!rgpd){ document.getElementById('err').style.display='block'; return; }
+  if(!n||t.length<8||!/^[A-Za-z0-9][A-Za-z0-9._%+-]*@[A-Za-z0-9][A-Za-z0-9.-]*\.[A-Za-z]{2,}$/.test(e)||cp.length<5||!rgpd){ document.getElementById('err').style.display='block'; return; }
   document.getElementById('err').style.display='none';
   data.nom=n; data.tel=t; data.email=e; data.code_postal=cp; data.rgpd=true; data.contact_capte=true;
 
