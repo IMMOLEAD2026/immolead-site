@@ -1,0 +1,970 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>IMMOLEAD · Slides 10 et 11</title>
+
+<!--
+  ============================================================
+  IMMOLEAD — REMPLACEMENT DES SLIDES 10 ET 11 DE immo2.html
+  ============================================================
+  [BLOC 1] CSS -> fin de ta balise <style>
+  [BLOC 2] les deux <section class="slide"> -> remplacent tes slides 10 et 11
+  [BLOC 3] JS  -> fin de ta balise <script>
+
+  Copie les dossiers "decors" et "agents" a la racine du site,
+  a cote de immo2.html. Sinon change DOSSIER en haut du [BLOC 3].
+
+  OU SE TROUVE LE COPYWRITING, tout en haut du [BLOC 3] :
+    ACCROCHES  le texte du post, au-dessus de l'image
+    STYLES     la mise en forme du titre sur le visuel
+    ACCENTS    la couleur des mots importants
+    PIEDS      le bas du visuel, bouton et mention
+    BAS        le bloc sous l'image, titre, sous-titre et bouton Facebook
+  ============================================================
+-->
+
+<style>
+/* ---------- demo seulement ---------- */
+:root{
+  --sand:#E9DCC4; --sand2:#DCCBAB; --paper:#F2E9D6;
+  --forest:#1A3D2C; --forest2:#122E20; --deep:#0C2318;
+  --bronze:#7A6224; --bronzeL:#A88A3C; --brass:#C9A94E; --ink:#1A3D2C;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:var(--sand2);font-family:'Plus Jakarta Sans',system-ui,-apple-system,sans-serif;color:var(--ink);overflow:hidden}
+.slide{position:fixed;inset:0;display:none;flex-direction:column;padding:4.2vh 4.4vw;
+  background:linear-gradient(rgba(26,61,44,.035) 1px,transparent 1px) 0 0/72px 72px,
+  linear-gradient(90deg,rgba(26,61,44,.035) 1px,transparent 1px) 0 0/72px 72px,
+  radial-gradient(120% 90% at 22% 8%,var(--paper) 0%,var(--sand) 55%,var(--sand2) 100%)}
+.slide.on{display:flex}
+.kick{font-family:'IBM Plex Mono',ui-monospace,monospace;font-size:1.15vh;letter-spacing:.24em;text-transform:uppercase;color:var(--bronze);margin-bottom:1.4vh;display:flex;align-items:center;gap:1vh}
+.kick:before{content:"";width:.8vh;height:.8vh;border-radius:50%;background:var(--brass)}
+h1{font-size:6.2vh;font-weight:800;line-height:1.05;letter-spacing:-.025em}
+h1.sm{font-size:4vh}
+.gr{color:var(--bronze)}
+.sub{font-size:1.7vh;color:rgba(26,61,44,.62);line-height:1.5;max-width:62ch}
+.body{flex:1;display:flex;flex-direction:column;justify-content:center;min-height:0}
+.row{display:flex;justify-content:space-between;align-items:baseline;gap:2.4vh;padding:1.5vh 0;border-bottom:1px solid rgba(26,61,44,.1);font-size:1.7vh}
+.row:last-child{border-bottom:none}
+.row b{font-weight:700;color:var(--forest);white-space:nowrap}
+.row span{color:rgba(26,61,44,.6);text-align:right}
+.foot{display:flex;justify-content:space-between;font-family:'IBM Plex Mono',monospace;font-size:1.05vh;letter-spacing:.18em;text-transform:uppercase;color:rgba(26,61,44,.42);padding-top:.7vh}
+.demonav{position:fixed;bottom:1.2vh;right:1.4vw;z-index:99;display:flex;gap:.6vh}
+.demonav button{font:inherit;font-size:1.25vh;padding:.6vh 1.2vh;border:1px solid rgba(26,61,44,.25);background:rgba(255,255,255,.5);color:var(--forest);border-radius:6px;cursor:pointer}
+</style>
+
+<style>
+/* ============================================================
+   [BLOC 1] CSS
+   ============================================================ */
+
+.splitL{display:grid;grid-template-columns:1.14fr .86fr;gap:2.8vw;align-items:center;flex:1;min-height:0}
+.splitR{display:grid;grid-template-columns:.92fr 1.08fr;gap:3.5vw;align-items:center;flex:1;min-height:0}
+
+/* ---------- configurateur ---------- */
+.cfg{display:flex;flex-direction:column;gap:.85vh;min-width:0}
+.cfgtabs{display:flex;gap:.5vh;margin-bottom:.2vh}
+.cfgtab{font:inherit;font-size:1.15vh;font-weight:600;padding:.75vh 1.5vh;border-radius:6px;cursor:pointer;
+  border:1px solid rgba(26,61,44,.2);background:transparent;color:rgba(26,61,44,.55);transition:.13s}
+.cfgtab.on{background:var(--forest);border-color:var(--forest);color:var(--paper)}
+.cfgpan{display:none;flex-direction:column;gap:.85vh}
+.cfgpan.on{display:flex}
+
+.cfgrow{display:grid;grid-template-columns:9.5vh 1fr;gap:1vh;align-items:start}
+.cfglab{font-family:'IBM Plex Mono',ui-monospace,monospace;font-size:.9vh;letter-spacing:.13em;text-transform:uppercase;
+  color:rgba(26,61,44,.42);padding-top:.8vh;line-height:1.4}
+.cfglab kbd{font-family:inherit;font-size:.82vh;border:1px solid rgba(26,61,44,.2);border-radius:3px;padding:0 .32vh;color:rgba(26,61,44,.45)}
+.cfgopts{display:flex;flex-wrap:wrap;gap:.42vh;align-items:center}
+
+.cfgchip{font:inherit;font-size:1.14vh;line-height:1;padding:.7vh 1vh;border-radius:999px;border:1px solid rgba(26,61,44,.2);
+  background:rgba(255,255,255,.4);color:rgba(26,61,44,.66);cursor:pointer;transition:.13s;white-space:nowrap}
+.cfgchip:hover{border-color:rgba(26,61,44,.42);background:rgba(255,255,255,.78)}
+.cfgchip.on{border-color:var(--forest);background:var(--forest);color:var(--paper);font-weight:600}
+.cfgchip.ghost{border-style:dashed;color:rgba(26,61,44,.5)}
+.cfgchip.ghost.on{border-style:solid;color:var(--paper)}
+
+.cfgdot{width:2.5vh;height:2.5vh;border-radius:50%;border:1px solid rgba(26,61,44,.18);cursor:pointer;transition:.13s;flex:0 0 auto;position:relative}
+.cfgdot:hover{transform:scale(1.12)}
+.cfgdot.on{box-shadow:0 0 0 2px var(--paper),0 0 0 3.5px var(--forest)}
+.cfgdot.ko:after{content:"!";position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:#fff;font-size:1.05vh;font-weight:800}
+
+.cfgth{position:relative;width:5.4vh;height:4vh;border-radius:4px;border:1px solid rgba(26,61,44,.18);cursor:pointer;
+  background-size:cover;background-position:center;overflow:hidden;transition:.13s;flex:0 0 auto}
+.cfgth.pers{background-size:contain;background-repeat:no-repeat;background-position:top center;background-color:rgba(255,255,255,.55)}
+.cfgth:hover{border-color:rgba(26,61,44,.45);transform:translateY(-1px)}
+.cfgth.on{border-color:var(--forest);box-shadow:0 0 0 2px rgba(26,61,44,.25)}
+.cfgth i{position:absolute;left:0;right:0;bottom:0;font-style:normal;font-family:'IBM Plex Mono',monospace;font-size:.7vh;
+  text-align:center;padding:.16vh .12vh;background:rgba(12,35,24,.66);color:#F2E9D6;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.cfgth b{position:absolute;top:.12vh;left:.3vh;font-family:'IBM Plex Mono',monospace;font-size:.7vh;color:#fff;text-shadow:0 1px 3px rgba(0,0,0,.7)}
+
+.cfgnote{font-size:1.02vh;line-height:1.4;color:rgba(26,61,44,.5);border-left:2px solid var(--brass);padding-left:.8vh;margin-top:.2vh}
+.cfgnote.warn{border-left-color:#B3541E;color:#8A4318}
+.cfgfile{display:none}
+
+/* ---------- mockup Facebook ---------- */
+.fbm{width:100%;max-width:32vh;margin:0 auto;background:#fff;border-radius:10px;overflow:hidden;
+  box-shadow:0 2vh 5vh rgba(12,35,24,.22),0 .3vh 1vh rgba(12,35,24,.1)}
+.fbm-top{display:flex;align-items:center;gap:1vh;padding:1vh 1.1vh}
+.fbm-av{width:3vh;height:3vh;border-radius:50%;flex:0 0 auto;background:var(--forest);color:var(--paper);
+  display:flex;align-items:center;justify-content:center;font-size:1.08vh;font-weight:700;background-size:cover;background-position:center 18%}
+.fbm-id{flex:1;min-width:0}
+.fbm-nm{font-size:1.22vh;font-weight:700;color:#050505;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.fbm-sp{font-size:.95vh;color:#65676B}
+.fbm-dots{color:#65676B;font-size:1.3vh;letter-spacing:.1em;flex:0 0 auto}
+.fbm-txt{padding:0 1.1vh .9vh;font-size:1.05vh;line-height:1.45;color:#050505;white-space:pre-line}
+.fbm-txt b{font-weight:700}
+.fbm-cta{display:flex;align-items:center;gap:1vh;padding:.85vh 1.1vh;background:#F7F8FA;border-top:1px solid #E4E6EB}
+.fbm-cta-ic{width:2.2vh;height:2.2vh;border-radius:50%;background:#E4E6EB;flex:0 0 auto}
+.fbm-cta-tx{flex:1;min-width:0}
+.fbm-cta-tx b{display:block;font-size:1.02vh;color:#050505;line-height:1.25}
+.fbm-cta-tx span{font-size:.92vh;color:#65676B;line-height:1.25;display:block}
+.fbm-cta-bt{background:var(--forest);color:#fff;font-size:.98vh;font-weight:600;padding:.72vh 1vh;border-radius:6px;white-space:nowrap}
+.fbm-soc{display:flex;justify-content:space-between;padding:.72vh 1.1vh;font-size:.92vh;color:#65676B;border-top:1px solid #E4E6EB}
+.fbm-act{display:flex;padding:.3vh 0;border-top:1px solid #E4E6EB}
+.fbm-act span{flex:1;text-align:center;font-size:.98vh;color:#65676B;padding:.6vh 0;font-weight:600}
+
+/* ---------- le creatif compose ---------- */
+.cr{position:relative;width:100%;aspect-ratio:4/5;overflow:hidden;background:#C9BCA6;container-type:inline-size}
+.cr-ph{position:absolute;inset:0;background-size:cover;transition:.28s;transform-origin:center}
+.cr-subj{position:absolute;background-size:auto 100%;background-repeat:no-repeat;transition:.2s}
+.cr-med{position:absolute;border-radius:50%;background-size:cover;background-position:center 18%;
+  box-shadow:0 0 0 .6cqw var(--crVeilFull),0 1cqw 3cqw rgba(0,0,0,.22)}
+
+/* le voile : une couche de flou + une couche de couleur, les deux en degrade */
+.cr-veil{position:absolute;inset:0;pointer-events:none}
+/* le voile est dessine pour un texte a gauche ; le miroir inverse l'axe */
+.cr[data-side="left"] .cr-veil{transform:scaleX(-1)}
+
+/* coins : deux foyers beiges, en haut a gauche et en bas a gauche */
+.cr[data-forme="coins"] .cr-veil{background:
+  radial-gradient(115% 88% at 0% 0%,  var(--crVeil) 0%,var(--crVeil) var(--crS1),transparent var(--crS2)),
+  radial-gradient(115% 88% at 0% 100%,var(--crVeil) 0%,var(--crVeil) var(--crS1),transparent var(--crS2)),
+  linear-gradient(90deg,var(--crVeilLow) 0%,var(--crVeilLow) var(--crS1),transparent var(--crS2),transparent 100%)}
+
+/* colonne : le degrade vertical de la charte */
+.cr[data-forme="colonne"] .cr-veil{background:linear-gradient(90deg,var(--crVeil) 0%,var(--crVeil) var(--crS1),transparent var(--crS2),transparent 100%)}
+
+/* diagonale */
+.cr[data-forme="diago"] .cr-veil{background:linear-gradient(108deg,var(--crVeil) 0%,var(--crVeil) var(--crS1),transparent var(--crS2),transparent 100%)}
+
+/* bandeau bas, impose par le placement du meme nom */
+.cr[data-side="bottom"] .cr-veil{background:linear-gradient(0deg,var(--crVeil) 0%,var(--crVeil) var(--crB1),transparent var(--crB2),transparent 100%)}
+.cr[data-side="bottom"] .cr-veil{transform:none}
+
+.cr-txt{position:absolute;inset:0;color:var(--crInk);font-size:9px;font-size:2.9cqw}
+.cr-el{position:absolute}
+
+.cr-ttl{font-family:'Playfair Display',Georgia,'Times New Roman',serif;font-weight:600;font-size:2em;line-height:1.1;letter-spacing:-.005em}
+.cr-ttl em{font-style:normal;color:var(--crAcc)}
+.cr-ttl.st-editorial{font-size:2.28em;line-height:1.06}
+.cr-ttl.st-editorial em{font-style:italic}
+.cr-ttl.st-affiche{font-family:'Plus Jakarta Sans',system-ui,sans-serif;font-weight:800;text-transform:uppercase;
+  font-size:1.5em;line-height:1.14;letter-spacing:-.012em}
+.cr-ttl.st-surligne em{background:var(--crAcc);color:#fff;padding:0 .14em;
+  -webkit-box-decoration-break:clone;box-decoration-break:clone}
+.cr-ttl.st-chiffre{font-size:1.3em;line-height:1.2}
+.cr-ttl.st-chiffre em{color:inherit;font-weight:700}
+.cr-hero{font-family:'Playfair Display',Georgia,serif;font-weight:600;color:var(--crAcc);
+  font-size:3.1em;line-height:.92;letter-spacing:-.02em;display:flex;align-items:flex-end}
+
+.cr-rule{height:1px;background:var(--crInk);opacity:.5}
+.cr-sub{font-size:.92em;line-height:1.35;opacity:.82}
+.cr-sub b{font-weight:600;color:var(--crAcc);opacity:1}
+.cr-data{display:flex;flex-direction:column}
+.cr-dl{display:flex;align-items:center;justify-content:space-between;gap:.6em;padding:.42em 0;border-bottom:1px solid var(--crInk20)}
+.cr-dl:last-child{border-bottom:none}
+.cr-dk{font-size:.86em;opacity:.82;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.cr-dv{font-family:'Playfair Display',Georgia,serif;font-size:1.02em;color:var(--crAcc);white-space:nowrap;font-weight:600}
+.cr-src{font-size:.72em;opacity:.6}
+.cr-sig{font-size:.8em;line-height:1.4}
+.cr-sig b{display:block;font-size:1.06em;font-weight:700}
+.cr-sig span{opacity:.72}
+
+.cr-btn{display:flex;align-items:center;justify-content:center;text-align:center;padding:0 .5em;
+  font-family:'Playfair Display',Georgia,serif;font-size:.98em;font-weight:600;border-radius:4px;background:var(--crAcc);color:#fff}
+.cr-btn.pd-contour{background:transparent;border:1px solid var(--crAcc);color:var(--crAcc)}
+.cr-btn.pd-bandeau{border-radius:0}
+.cr-btn.pd-lien{background:none;color:var(--crAcc);justify-content:flex-start;padding:0;
+  font-family:'Plus Jakarta Sans',sans-serif;font-weight:700;font-size:.88em}
+.cr-btn.pd-lien:after{content:" →";margin-left:.35em}
+.cr-btn.pd-capitale{font-family:'Plus Jakarta Sans',sans-serif;font-weight:700;text-transform:uppercase;
+  font-size:.78em;letter-spacing:.09em;border-radius:0}
+.cr-mn{font-size:.7em;opacity:.65;text-align:center}
+.cr-mn.left{text-align:left}
+
+.cr-txt [contenteditable="true"]{outline:none}
+.cr-txt.edit [contenteditable="true"]:hover{box-shadow:inset 0 0 0 1px rgba(196,81,15,.45)}
+.cr-txt.edit [contenteditable="true"]:focus{box-shadow:inset 0 0 0 1px var(--crAcc);background:rgba(255,255,255,.35)}
+
+.exlbl{display:flex;align-items:center;gap:1vh;justify-content:flex-end;margin-bottom:.7vh;
+  font-family:'IBM Plex Mono',monospace;font-size:.92vh;letter-spacing:.2em;text-transform:uppercase;color:rgba(26,61,44,.45)}
+.exlbl:after{content:"";width:3.2vh;height:1px;background:rgba(26,61,44,.3)}
+
+/* ---------- formulaire vendeur ---------- */
+.lf-wrap{position:relative}
+.lf{width:100%;max-width:32vh;margin:0 auto;background:#fff;border-radius:10px;overflow:hidden;
+  box-shadow:0 2vh 5vh rgba(12,35,24,.22),0 .3vh 1vh rgba(12,35,24,.1)}
+.lf-top{display:flex;align-items:center;gap:1vh;padding:1.2vh}
+.lf-bd{max-height:50vh;overflow:auto;scrollbar-width:thin;
+  -webkit-mask-image:linear-gradient(#000 0,#000 calc(100% - 3vh),transparent 100%);
+  mask-image:linear-gradient(#000 0,#000 calc(100% - 3vh),transparent 100%)}
+.lf-bd::-webkit-scrollbar{width:3px}
+.lf-bd::-webkit-scrollbar-thumb{background:rgba(26,61,44,.2);border-radius:3px}
+.lf-f{padding:1.2vh 1.45vh;border-bottom:1px solid rgba(26,61,44,.09)}
+.lf-q{font-size:1.12vh;color:rgba(26,61,44,.5);margin-bottom:.65vh;display:flex;align-items:baseline;gap:.55vh}
+.lf-q i{font-style:normal;font-family:'IBM Plex Mono',monospace;font-size:.85vh;color:rgba(26,61,44,.33)}
+.lf-o{display:inline-block;font-size:1.2vh;line-height:1;padding:.68vh 1.15vh;border-radius:999px;border:1px solid rgba(26,61,44,.2);
+  color:rgba(26,61,44,.6);margin:.4vh .42vh 0 0;cursor:pointer;transition:.12s;user-select:none}
+.lf-o:hover{border-color:rgba(26,61,44,.45)}
+.lf-o.on{border-color:var(--forest);background:rgba(26,61,44,.1);color:var(--forest);font-weight:600}
+.lf-o.ko{border-color:rgba(179,84,30,.5);background:rgba(179,84,30,.1);color:#8A4318}
+.lf-v{font-size:1.4vh;color:var(--forest)}
+.lf-send{padding:1.3vh;background:rgba(26,61,44,.03)}
+.lf-send button{width:100%;font:inherit;font-size:1.28vh;font-weight:700;color:#fff;background:var(--forest);
+  border:none;border-radius:6px;padding:1.2vh;cursor:pointer;transition:.15s}
+.lf-send button:hover:not(:disabled){background:var(--forest2)}
+.lf-send button:disabled{opacity:.42;cursor:default}
+.lf-out{position:absolute;inset:0;background:var(--paper);display:flex;flex-direction:column;
+  opacity:0;pointer-events:none;transition:.26s;border-radius:10px;overflow:hidden;box-shadow:0 2vh 5vh rgba(12,35,24,.22)}
+.lf-out.on{opacity:1;pointer-events:auto}
+.lf-oh{padding:1.4vh;background:var(--forest);color:var(--paper)}
+.lf-oh b{display:block;font-size:1.45vh}
+.lf-oh span{font-size:1.08vh;opacity:.72}
+.lf-ob{padding:1.1vh 1.45vh;display:flex;flex-direction:column;gap:.85vh;overflow:auto}
+.lf-or{display:flex;justify-content:space-between;gap:1.4vh;font-size:1.18vh;border-bottom:1px solid rgba(26,61,44,.1);padding-bottom:.65vh}
+.lf-or b{color:rgba(26,61,44,.5);font-weight:500}
+.lf-or span{color:var(--forest);font-weight:600;text-align:right}
+.lf-back{margin:auto 1.45vh 1.45vh;font:inherit;font-size:1.18vh;padding:.95vh;border:1px solid rgba(26,61,44,.25);
+  background:transparent;color:var(--forest);border-radius:6px;cursor:pointer}
+
+@media (max-width:900px){ .splitL,.splitR{grid-template-columns:1fr;gap:2vh} }
+</style>
+</head>
+<body>
+
+<!-- ============================================================
+     [BLOC 2] LES DEUX SLIDES
+     ============================================================ -->
+
+<section class="slide on" id="s10">
+  <p class="kick">Votre publicité</p>
+  <div class="body splitL">
+
+    <div class="cfg">
+      <h1 class="sm">À votre nom,<br><span class="gr">avec votre visage</span></h1>
+      <p class="sub" style="margin:.3vh 0 .6vh">Nous restons invisibles. On construit la vôtre maintenant, pendant qu'on se parle.</p>
+
+      <div class="cfgtabs">
+        <button class="cfgtab on" data-pan="img">L'image</button>
+        <button class="cfgtab" data-pan="txt">Les mots</button>
+      </div>
+
+      <div class="cfgpan on" id="panImg">
+        <div class="cfgrow">
+          <div class="cfglab">Décor <kbd>1</kbd>–<kbd>7</kbd></div>
+          <div class="cfgopts" id="cfgDecors"></div>
+        </div>
+        <div class="cfgrow">
+          <div class="cfglab">Agent <kbd>G</kbd></div>
+          <div class="cfgopts" id="cfgAgents"></div>
+        </div>
+        <div class="cfgrow">
+          <div class="cfglab">Pose <kbd>A</kbd><kbd>Z</kbd></div>
+          <div class="cfgopts" id="cfgPoses"></div>
+        </div>
+        <div class="cfgrow">
+          <div class="cfglab">Taille <kbd>T</kbd></div>
+          <div class="cfgopts" id="cfgTaille"></div>
+        </div>
+        <div class="cfgrow">
+          <div class="cfglab">Voile <kbd>W</kbd></div>
+          <div class="cfgopts" id="cfgVoile"></div>
+        </div>
+        <div class="cfgrow">
+          <div class="cfglab">Forme <kbd>O</kbd></div>
+          <div class="cfgopts" id="cfgForme"></div>
+        </div>
+        <div class="cfgrow">
+          <div class="cfglab">Mots <kbd>P</kbd></div>
+          <div class="cfgopts" id="cfgPlace"></div>
+        </div>
+      </div>
+
+      <div class="cfgpan" id="panTxt">
+        <div class="cfgrow">
+          <div class="cfglab">Accroche <kbd>C</kbd></div>
+          <div class="cfgopts" id="cfgCopy"></div>
+        </div>
+        <div class="cfgrow">
+          <div class="cfglab">Style <kbd>S</kbd></div>
+          <div class="cfgopts" id="cfgStyle"></div>
+        </div>
+        <div class="cfgrow">
+          <div class="cfglab">Mots clés <kbd>X</kbd></div>
+          <div class="cfgopts" id="cfgAccent"></div>
+        </div>
+        <div class="cfgrow">
+          <div class="cfglab">Écriture <kbd>I</kbd></div>
+          <div class="cfgopts" id="cfgEncre"></div>
+        </div>
+        <div class="cfgrow">
+          <div class="cfglab">Teinte <kbd>U</kbd></div>
+          <div class="cfgopts" id="cfgTeinte"></div>
+        </div>
+        <div class="cfgrow">
+          <div class="cfglab">Pied <kbd>V</kbd></div>
+          <div class="cfgopts" id="cfgPied"></div>
+        </div>
+        <div class="cfgrow">
+          <div class="cfglab">Sous l'image <kbd>B</kbd></div>
+          <div class="cfgopts" id="cfgBas"></div>
+        </div>
+      </div>
+
+      <div class="cfgopts" style="margin-top:.1vh">
+        <button class="cfgchip ghost" id="cfgEdit">Modifier le texte</button>
+        <button class="cfgchip ghost" id="cfgUpA">Autre agent</button>
+        <button class="cfgchip ghost" id="cfgUpD">Autre décor</button>
+        <button class="cfgchip ghost" id="cfgReset">Réinitialiser</button>
+        <input type="file" accept="image/*" class="cfgfile" id="cfgFileA">
+        <input type="file" accept="image/*" class="cfgfile" id="cfgFileD">
+      </div>
+
+      <p class="cfgnote" id="cfgNote"></p>
+    </div>
+
+    <div style="min-width:0">
+      <div class="exlbl">Votre créatif, en direct</div>
+      <div class="fbm">
+        <div class="fbm-top">
+          <div class="fbm-av" id="fbAv">CV</div>
+          <div class="fbm-id">
+            <div class="fbm-nm" id="fbNm">Claire Vasseur</div>
+            <div class="fbm-sp">Sponsorisé · 🌐</div>
+          </div>
+          <div class="fbm-dots">···</div>
+        </div>
+        <div class="fbm-txt" id="fbTxt"></div>
+
+        <div class="cr" id="cr" data-side="right">
+          <div class="cr-ph" id="crPh"></div>
+          <div class="cr-veil"></div>
+          <div class="cr-subj" id="crSubj" hidden></div>
+          <div class="cr-med" id="crMed" hidden></div>
+          <div class="cr-txt" id="crTxt"></div>
+        </div>
+
+        <div class="fbm-cta">
+          <div class="fbm-cta-ic"></div>
+          <div class="fbm-cta-tx"><b id="fbCtaT"></b><span id="fbCtaS"></span></div>
+          <div class="fbm-cta-bt" id="fbCtaB"></div>
+        </div>
+        <div class="fbm-soc"><span>👍❤️ 124</span><span>17 commentaires &nbsp; 8 partages</span></div>
+        <div class="fbm-act"><span>J'aime</span><span>Commenter</span><span>Partager</span></div>
+      </div>
+    </div>
+
+  </div>
+  <div class="foot"><span>Le créatif · construit devant vous</span><span>10</span></div>
+</section>
+
+<section class="slide" id="s11">
+  <p class="kick">Le formulaire vendeur</p>
+  <div class="body splitR">
+    <div style="min-width:0">
+      <div class="lf-wrap">
+        <div class="lf">
+          <div class="lf-top">
+            <div class="fbm-av" id="lfAv">CV</div>
+            <div class="fbm-id">
+              <div class="fbm-nm" id="lfNm">Claire Vasseur</div>
+              <div class="fbm-sp" id="lfSub">Formulaire Meta</div>
+            </div>
+          </div>
+          <div class="lf-bd" id="lfBody"></div>
+          <div class="lf-send"><button id="lfSend" disabled>Répondez pour voir la fiche</button></div>
+        </div>
+        <div class="lf-out" id="lfOut">
+          <div class="lf-oh"><b>Fiche reçue</b><span id="lfOutSub">Dans votre espace, en moins d'une minute</span></div>
+          <div class="lf-ob" id="lfOutBody"></div>
+          <button class="lf-back" id="lfBack">Refaire la démonstration</button>
+        </div>
+      </div>
+    </div>
+    <div style="min-width:0">
+      <h1 class="sm">Le vendeur remplit<br><span class="gr">sans quitter Facebook</span></h1>
+      <p class="sub" style="margin:1.5vh 0 2.2vh">Formulaire natif Meta : pas de page à charger, coordonnées pré-remplies par son profil. Répondez à sa place, vous verrez la fiche telle qu'elle arrive chez vous.</p>
+      <div class="row"><b id="rowQ">Huit questions</b><span id="rowQs"></span></div>
+      <div class="row"><b>Le tri se fait là</b><span>le locataire, le curieux et le « plus tard » sortent d'eux-mêmes</span></div>
+      <div class="row"><b>Consentement</b><span>c'est le vendeur qui vient, et qui accepte d'être rappelé</span></div>
+      <div class="row"><b>Adresse du bien</b><span>vous préparez votre estimation avant même de décrocher</span></div>
+    </div>
+  </div>
+  <div class="foot"><span>Formulaire natif Meta</span><span>11</span></div>
+</section>
+
+<div class="demonav">
+  <button onclick="demoGo(10)">Slide 10</button>
+  <button onclick="demoGo(11)">Slide 11</button>
+</div>
+
+<script>
+/* ============================================================
+   [BLOC 3] JS
+   ============================================================ */
+
+const DOSSIER = "decors/";
+const DOSSIER_AGENTS = "agents/";
+
+/* ------------------------------------------------------------
+   LES DECORS
+   ------------------------------------------------------------ */
+const DECORS = [
+  { nom:"Village perché", img:"gordes-glycine.jpg", ech:1.0,      pos:"58% 50%", zoom:1,    place:"charte",
+    note:"Provence, Luberon, arrière-pays. La vallée à gauche porte bien le texte." },
+  { nom:"Riviera",        img:"riviera-monaco.jpg", ech:0.82,      pos:"56% 50%", zoom:1,    place:"charte",
+    note:"Côte d'Azur, Monaco, Beausoleil. La mer à gauche dégage la colonne." },
+  { nom:"Bord de mer",    img:"bord-de-mer.jpg", ech:0.78,         pos:"58% 50%", zoom:1,    place:"charte",
+    note:"Littoral contemporain. Ciel clair : préférer un accent foncé." },
+  { nom:"Contemporain",   img:"contemporain-gravier.jpg", ech:0.88,pos:"52% 52%", zoom:1,    place:"charte",
+    note:"Neuf et haut de gamme. Fond très clair, le voile se voit peu." },
+  { nom:"Avenue",         img:"avenue-haussmann.jpg", ech:0.8,    pos:"42% 50%", zoom:1,    place:"charte",
+    note:"Ville, immeuble de caractère. Le trottoir à gauche est la zone calme." },
+  { nom:"Rue de village", img:"village-loire.jpg", ech:0.95,       pos:"58% 55%", zoom:1,    place:"charte",
+    note:"Bourg, campagne habitée. Lumière rasante, le voile crème suffit." },
+  { nom:"Entrée",         img:"portail-contre-jour.jpg", ech:0.9, pos:"50% 45%", zoom:1.04, place:"charte",
+    note:"Contre-jour chargé. Si le titre accroche mal, essaie le bandeau bas." }
+];
+
+/* ------------------------------------------------------------
+   LES AGENTS — photos detourees, fond transparent
+   ------------------------------------------------------------ */
+const AGENTS = [
+  { nom:"Claire",  img:"agent-f1.webp", prenom:"Claire Vasseur",   fonction:"Conseillère immobilier" },
+  { nom:"Martine", img:"agent-f2.webp", prenom:"Martine Delaunay", fonction:"Conseillère immobilier" },
+  { nom:"Nadia",   img:"agent-f3.webp", prenom:"Nadia Kermani",    fonction:"Conseillère immobilier" },
+  { nom:"Franck",  img:"agent-h1.webp", prenom:"Franck Adjani",    fonction:"Conseiller immobilier" },
+  { nom:"Thomas",  img:"agent-h2.webp", prenom:"Thomas Reynaud",   fonction:"Conseiller immobilier" },
+  { nom:"Patrick", img:"agent-h3.webp", prenom:"Patrick Vidal",    fonction:"Conseiller immobilier" }
+];
+
+/* ------------------------------------------------------------
+   LES POSES — ou se tient la personne sur le decor
+   h / bottom / right / left / w : en pourcentage du creatif
+   ------------------------------------------------------------ */
+const POSES = [
+  { nom:"Plein pied",  type:"png",   k:1,    bottom:0,   right:0, side:"right" },
+  { nom:"Décalée",     type:"png",   k:.9,   bottom:0,   right:6, side:"right" },
+  { nom:"Buste",       type:"png",   k:2.1,  bottom:-62, right:0, side:"right", deborde:true },
+  { nom:"Miroir",      type:"png",   k:1,    bottom:0,   left:0,  side:"left"  },
+  { nom:"Médaillon",   type:"medal", w:30,  right:9, top:56, side:"right" },
+  { nom:"Décor seul",  type:"none",  side:"right" }
+];
+
+/* ------------------------------------------------------------
+   LE VOILE — plus il est leger, plus on voit le decor derriere
+   op : opacite du crème. blur : flou du decor sous le voile.
+   ------------------------------------------------------------ */
+const FORMES = [
+  { nom:"Coins",     k:"coins"   },
+  { nom:"Colonne",   k:"colonne" },
+  { nom:"Diagonale", k:"diago"   }
+];
+
+/* la teinte du voile */
+const TEINTES = [
+  { nom:"Beige",  c:"#EFE2CE" },
+  { nom:"Crème",  c:"#FDF9F4" },
+  { nom:"Sable",  c:"#E4D5BC" },
+  { nom:"Lin",    c:"#F3EDE2" },
+  { nom:"Brun",   c:"#33231A" }
+];
+
+/* la couleur du texte courant */
+const ENCRES = [
+  { nom:"Brun",    c:"#3E2018" },
+  { nom:"Ardoise", c:"#1D2A33" },
+  { nom:"Forêt",   c:"#17291F" },
+  { nom:"Prune",   c:"#2B1D27" },
+  { nom:"Noir doux", c:"#241F1C" },
+  { nom:"Crème",   c:"#F6EFE4" }
+];
+
+/* la taille du personnage, en plus de l'echelle propre a chaque decor */
+/* "Ajustée" calcule la hauteur maximale qui laisse la colonne de texte libre,
+   d'apres les proportions reelles de la photo. Les autres crans mordent
+   volontairement sur le texte, le voile doit alors etre plus dense. */
+const TAILLES = [
+  { nom:"Ajustée", f:1 }, { nom:"Grande", f:1.22 }, { nom:"Très grande", f:1.5 }, { nom:"Pleine hauteur", plein:true }
+];
+
+const VOILES = [
+  { nom:"Léger",  op:.58, s1:"50%", s2:"72%", b1:"66%", b2:"84%", conforme:false },
+  { nom:"Moyen",  op:.76, s1:"46%", s2:"68%", b1:"64%", b2:"80%", conforme:false },
+  { nom:"Dense",  op:.90, s1:"42%", s2:"64%", b1:"62%", b2:"78%", conforme:false },
+  { nom:"Charte", op:1,   s1:"40%", s2:"60%", b1:"62%", b2:"78%", conforme:true  }
+];
+
+/* ------------------------------------------------------------
+   PLACEMENT DES MOTS — en pourcentage de la hauteur
+   ------------------------------------------------------------ */
+const PLACEMENTS = {
+  charte:{ nom:"Charte", side:null, conforme:true, x:6.5, w:47,
+    ttl:[8,27], rule1:29, sub:[32,37], data:[40,52], src:54, rule2:78, sig:[80,86], btn:[88,93], mn:97 },
+  story:{ nom:"9:16 Reels", side:null, conforme:true, x:6.5, w:47,
+    ttl:[8,27], rule1:29, sub:[32,37], data:[40,52], src:54, rule2:58, sig:[60,66], btn:[68,73], mn:76 },
+  bas:{ nom:"Bandeau bas", side:"bottom", conforme:false, x:7, w:86,
+    ttl:[42,57], rule1:59, sub:[61,66], data:[68,79], src:81, rule2:83, sig:[85,89], btn:[91,95], mn:98 },
+  miroir:{ nom:"À droite", side:"left", conforme:false, x:46.5, w:47,
+    ttl:[8,27], rule1:29, sub:[32,37], data:[40,52], src:54, rule2:78, sig:[80,86], btn:[88,93], mn:97 }
+};
+
+/* ------------------------------------------------------------
+   LES ACCROCHES
+   post : le texte au-dessus de l'image. **mots** passent en gras.
+   ttl + acc : le titre sur le visuel, acc = les mots en couleur.
+   sub : le sous-titre, *mots* en couleur d'accent.
+   btn + mn : le bas du visuel.  bas : le bloc Facebook assorti.
+   ------------------------------------------------------------ */
+const ACCROCHES = [
+  { nom:"Mandat exclusif", bas:2,
+    post:"Six panneaux devant la même maison, ça rassure qui ?\n\nQuand trois agences vendent le même bien, l'acheteur ne se dit pas qu'il est rare. Il se dit qu'il a le temps.\n\nJe ne prends **qu'un seul mandat par secteur**. Un interlocuteur, un prix, une histoire à raconter.",
+    ttl:"Six mandats ne font pas", acc:"six acheteurs",
+    sub:"Ils divisent le prix, ils ne multiplient pas la *demande*.",
+    btn:"Vérifier mon secteur", mn:"Un agent par commune" },
+
+  { nom:"Prix réel", bas:1,
+    post:"Trois maisons affichées à 320 000 € dans votre rue. Aucune n'est partie à ce prix.\n\nJe travaille sur les ventes **enregistrées chez le notaire**, pas sur les annonces. C'est moins flatteur, c'est plus utile.\n\nDites-moi votre rue, je vous dis ce qui s'y est vendu.",
+    ttl:"Un prix affiché n'est pas", acc:"un prix payé",
+    sub:"Entre l'annonce et l'acte, l'écart médian dépasse *5 %*.",
+    btn:"Voir les ventes de ma rue", mn:"Données DVF, publiques" },
+
+  { nom:"Rue ≠ commune", bas:0,
+    post:"Deux maisons, deux rues, six cents mètres d'écart. Quarante mille euros de différence.\n\nUne estimation en ligne ne connaît que le code postal. Elle ne sait pas que votre rue est **calme après 18 h**, ni que celle d'à côté donne sur la départementale.\n\nJe passe, je regarde, je vous donne un prix que je peux défendre devant un acheteur.",
+    ttl:"Le prix de votre rue n'est pas", acc:"celui de la commune",
+    sub:"Une moyenne communale écrase *tous les écarts*.",
+    btn:"Votre estimation gratuite", mn:"Réponse sous 24 h" },
+
+  { nom:"Discrétion", bas:3,
+    post:"Vendre sans que le quartier le sache, c'est possible.\n\nPas de panneau, pas de photos en ligne, pas de visites du dimanche. Je présente le bien **aux acheteurs déjà en recherche** sur le secteur.\n\nSi ça ne se fait pas, personne n'aura rien su.",
+    ttl:"Vendre sans que le quartier", acc:"l'apprenne",
+    sub:"Ni panneau, ni annonce. Seulement les acheteurs *déjà en recherche*.",
+    btn:"Parler d'une vente discrète", mn:"Confidentiel" },
+
+  { nom:"Le bon moment", bas:4,
+    post:"« On verra au printemps. »\n\nAu printemps, tout le monde met en vente en même temps. Votre bien devient **un choix parmi douze**.\n\nLes mois creux comptent moins d'acheteurs, mais ceux qui visitent en janvier ne visitent pas pour se promener.",
+    ttl:"Moins d'acheteurs,", acc:"des acheteurs sérieux",
+    sub:"Qui visite en janvier ne visite pas *pour se promener*.",
+    btn:"En parler maintenant", mn:"Sans engagement" },
+
+  { nom:"Secteur connu", bas:0,
+    post:"Je travaille ce secteur et rien d'autre.\n\nJe sais quelle rue part en trois semaines, laquelle met six mois, et **pourquoi les deux ne s'estiment pas pareil**.\n\nC'est la seule raison pour laquelle mes estimations tombent juste.",
+    ttl:"Un secteur, un agent,", acc:"une estimation juste",
+    sub:"Connaître la rue vaut mieux que connaître *le marché*.",
+    btn:"Faire estimer mon bien", mn:"Réponse sous 24 h" }
+];
+
+/* ------------------------------------------------------------
+   LES STYLES DU TITRE
+   ------------------------------------------------------------ */
+const STYLES = [
+  { nom:"Charte",    cls:"" },
+  { nom:"Éditorial", cls:"st-editorial" },
+  { nom:"Affiche",   cls:"st-affiche" },
+  { nom:"Surligné",  cls:"st-surligne" },
+  { nom:"Chiffre",   cls:"st-chiffre", hero:true }
+];
+
+/* ------------------------------------------------------------
+   LA COULEUR DES MOTS IMPORTANTS
+   ------------------------------------------------------------ */
+const ACCENTS = [
+  { nom:"Terre brûlée", acc:"#C4510F" },
+  { nom:"Forêt",        acc:"#1A5E3A" },
+  { nom:"Bordeaux",     acc:"#8C2F39" },
+  { nom:"Ardoise",      acc:"#2E5A7A" },
+  { nom:"Bronze",       acc:"#8A6414" },
+  { nom:"Prune",        acc:"#6B3A5B" },
+  { nom:"Encre",        acc:"#1F3A4D" },
+  { nom:"Or clair",     acc:"#C9A94E" },
+  { nom:"Blanc",        acc:"#FFFFFF" }
+];
+
+/* ------------------------------------------------------------
+   LE PIED DU VISUEL
+   ------------------------------------------------------------ */
+const PIEDS = [
+  { nom:"Bouton plein", cls:"" },
+  { nom:"Contour",      cls:"pd-contour", contour:true },
+  { nom:"Bandeau",      cls:"pd-bandeau", large:true },
+  { nom:"Lien fléché",  cls:"pd-lien",    contour:true, gauche:true },
+  { nom:"Capitales",    cls:"pd-capitale" },
+  { nom:"Sans bouton",  cls:"", cache:true }
+];
+
+/* ------------------------------------------------------------
+   LE BLOC SOUS L'IMAGE (Facebook)
+   ------------------------------------------------------------ */
+const BAS = [
+  { nom:"Estimation",  t:"Estimation confidentielle",  s:"Réponse en 2 minutes, sans engagement",           b:"Estimer mon bien" },
+  { nom:"Ventes",      t:"Le prix réel de votre rue",  s:"D'après les ventes enregistrées chez le notaire", b:"Voir les ventes" },
+  { nom:"Secteur",     t:"Un seul mandat par secteur", s:"Vérifiez si le vôtre est encore libre",           b:"Vérifier" },
+  { nom:"Discret",     t:"Vente discrète",             s:"Sans panneau et sans annonce en ligne",           b:"En savoir plus" },
+  { nom:"Rendez-vous", t:"Estimation sur place",       s:"30 minutes chez vous, rapport écrit",             b:"Prendre rendez-vous" }
+];
+
+/* ------------------------------------------------------------
+   LE PROFIL AFFICHE
+   ------------------------------------------------------------ */
+const PROFIL = {
+  secteur:"Saint-Nazaire et 10 km",
+  communes:[ ["Saint-Nazaire","2 891 €/m²"], ["Pornichet","4 210 €/m²"], ["Trignac","2 340 €/m²"] ],
+  source:"Ventes enregistrées, DVF"
+};
+
+/* ------------------------------------------------------------
+   LES QUESTIONS DU FORMULAIRE META
+   >>> REMPLACE CE TABLEAU par celles de tes campagnes en ligne.
+   ------------------------------------------------------------ */
+const FORM = [
+  { q:"Êtes-vous propriétaire du bien ?", type:"choix", opts:["Oui","Non"], ko:[1], fiche:"Propriétaire", cle:"propriété" },
+  { q:"Votre intention",                  type:"choix", opts:["Vendre","Estimer","Me renseigner"], ko:[2], fiche:"Intention", cle:"intention" },
+  { q:"Délai de vente envisagé",          type:"choix", opts:["Moins de 3 mois","3 à 6 mois","Plus tard"], ko:[2], fiche:"Délai", cle:"délai" },
+  { q:"Type de projet",                   type:"choix", opts:["Revente","Succession","Mutation","Séparation"], ko:[], fiche:"Projet", cle:"projet" },
+  { q:"Type de bien",                     type:"choix", opts:["Maison","Appartement","Terrain","Immeuble"], ko:[], fiche:"Bien", cle:"bien" },
+  { q:"Secteur du bien",                  type:"saisie", val:"Saint-Nazaire · 44600", fiche:"Secteur", cle:"secteur" },
+  { q:"Adresse postale",                  type:"saisie", val:"12 rue des Cordeliers", fiche:"Adresse", cle:"adresse" },
+  { q:"Nom, téléphone, email",            type:"saisie", val:"Pré-remplis par Meta · vérifiés", fiche:"Contact", cle:"coordonnées" }
+];
+
+/* ============================================================
+   MOTEUR
+   ============================================================ */
+(function(){
+  const $=s=>document.querySelector(s);
+  const el=(t,c,h)=>{const e=document.createElement(t);if(c)e.className=c;if(h!=null)e.innerHTML=h;return e;};
+  const esc=s=>String(s).replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));
+  const gras=s=>esc(s).replace(/\*\*(.+?)\*\*/g,'<b>$1</b>');
+  const acce=s=>esc(s).replace(/\*(.+?)\*/g,'<b>$1</b>');
+  const rgba=(h,a)=>{const n=parseInt(h.slice(1),16);return "rgba("+(n>>16&255)+","+(n>>8&255)+","+(n&255)+","+a+")";};
+
+  const lin=v=>{v/=255;return v<=.03928?v/12.92:Math.pow((v+.055)/1.055,2.4);};
+  const lum=h=>{const n=parseInt(h.slice(1),16);return .2126*lin(n>>16&255)+.7152*lin(n>>8&255)+.0722*lin(n&255);};
+  const ratio=(a,b)=>{const L=lum(a),M=lum(b);return (Math.max(L,M)+.05)/(Math.min(L,M)+.05);};
+
+  const DEF={ d:0, ag:0, p:0, taille:0, voile:1, forme:0, teinte:0, encre:0,
+              place:"charte", copy:2, style:0, acc:0, pied:0, bas:0,
+              edit:false, upA:"", upD:{}, basAuto:true };
+  const S=Object.assign({},DEF);
+
+  const cr=$("#cr"), crPh=$("#crPh"), crTxt=$("#crTxt"), crSubj=$("#crSubj"), crMed=$("#crMed");
+
+  /* proportions reelles de chaque photo d'agent, mesurees au chargement */
+  const RATIOS={};
+  function mesurer(src,apres){
+    if(!src||RATIOS[src]!=null){ if(apres)apres(); return; }
+    const i=new Image();
+    i.onload=()=>{ RATIOS[src]=i.naturalWidth/i.naturalHeight; if(apres)apres(); };
+    i.onerror=()=>{ RATIOS[src]=.7; if(apres)apres(); };
+    i.src=src;
+  }
+  const imgDecor=i=>S.upD[i]||(DECORS[i].img?DOSSIER+DECORS[i].img:"");
+  const imgAgent=()=>S.upA||(AGENTS[S.ag]&&AGENTS[S.ag].img?DOSSIER_AGENTS+AGENTS[S.ag].img:"");
+  const nomAgent=()=>S.upA?"Votre nom":(AGENTS[S.ag]?AGENTS[S.ag].prenom:"Votre nom");
+  const fnAgent=()=>AGENTS[S.ag]?AGENTS[S.ag].fonction:"Conseiller immobilier";
+
+  function chips(sel,list,idx,pick){
+    const w=$(sel); w.innerHTML="";
+    list.forEach((o,i)=>{
+      const b=el("button","cfgchip"+(i===idx?" on":""),esc(o.nom));
+      b.onclick=()=>pick(i);
+      w.appendChild(b);
+    });
+  }
+
+  function renderDecors(){
+    const w=$("#cfgDecors"); w.innerHTML="";
+    DECORS.forEach((d,i)=>{
+      const t=el("div","cfgth"+(i===S.d?" on":""));
+      const src=imgDecor(i);
+      if(src) t.style.backgroundImage="url('"+src+"')";
+      else t.style.background="linear-gradient(160deg,#C9B79B,#8E7F68)";
+      t.appendChild(el("b",null,String(i+1)));
+      t.appendChild(el("i",null,esc(d.nom)));
+      t.onclick=()=>{ S.d=i; if(DECORS[i].place) S.place=DECORS[i].place; renderAll(); };
+      w.appendChild(t);
+    });
+  }
+
+  function renderAgents(){
+    const w=$("#cfgAgents"); w.innerHTML="";
+    AGENTS.forEach((a,i)=>{
+      const t=el("div","cfgth pers"+(i===S.ag&&!S.upA?" on":""));
+      t.style.backgroundImage="url('"+DOSSIER_AGENTS+a.img+"')";
+      t.appendChild(el("i",null,esc(a.nom)));
+      t.onclick=()=>{ S.ag=i; S.upA=""; renderAll(); };
+      w.appendChild(t);
+    });
+  }
+
+  function dots(sel,list,idx,pick,col,warn){
+    const w=$(sel); w.innerHTML="";
+    list.forEach((o,i)=>{
+      const c=col(o), ko=warn?warn(o):false;
+      const d=el("div","cfgdot"+(i===idx?" on":"")+(ko?" ko":""));
+      d.style.background=c;
+      if(lum(c)>.8) d.style.borderColor="rgba(26,61,44,.35)";
+      d.title=o.nom+(ko?" · contraste insuffisant sur un bouton plein":"");
+      d.onclick=()=>pick(i);
+      w.appendChild(d);
+    });
+  }
+
+  function renderCreatif(){
+    const P0=PLACEMENTS[S.place], D=DECORS[S.d], pose=POSES[S.p], C=ACCROCHES[S.copy],
+          ST=STYLES[S.style], AC=ACCENTS[S.acc], PD=PIEDS[S.pied], VO=VOILES[S.voile],
+          FO=FORMES[S.forme], TE=TEINTES[S.teinte], EN=ENCRES[S.encre], TA=TAILLES[S.taille];
+    const ech=(D.ech||1);
+    const P=Object.assign({},P0);
+
+    const src=imgDecor(S.d);
+    if(src){ crPh.style.backgroundImage="url('"+src+"')"; crPh.style.backgroundPosition=D.pos||"center"; }
+    else   { crPh.style.backgroundImage="none"; crPh.style.background="linear-gradient(160deg,#C9B79B,#8E7F68)"; }
+    crPh.style.transform="scale("+(D.zoom||1)+")";
+
+    /* la personne */
+    const ag=imgAgent();
+    crSubj.hidden=true; crMed.hidden=true;
+    if(pose.type==="png"&&ag){
+      crSubj.hidden=false;
+      crSubj.style.backgroundImage="url('"+ag+"')";
+      const r=RATIOS[ag]||.7;
+      const decal=pose.right!=null?Math.max(pose.right,0):Math.max(pose.left,0);
+      /* largeur laissee libre par la colonne de texte, en % du creatif */
+      const dispo=Math.max(100-(P.x+P.w)-decal-1.5, 22);
+      /* le creatif est en 4:5 : largeur(%) = ratio * hauteur(%) * 1.25 */
+      const hAuto=dispo/(1.25*r);
+      const hEff = TA.plein ? (pose.deborde?pose.k*60:97)
+                            : Math.min(hAuto*pose.k*TA.f*ech, pose.deborde?999:97);
+      crSubj.style.height=hEff+"%";
+      /* la zone va jusqu'au bord oppose : la photo n'est jamais rognee */
+      crSubj.style.width=(100-decal)+"%";
+      crSubj.style.top="auto";
+      crSubj.style.bottom=(pose.bottom||0)+"%";
+      crSubj.style.left = pose.left!=null?pose.left+"%":"auto";
+      crSubj.style.right= pose.right!=null?pose.right+"%":"auto";
+      crSubj.style.backgroundPosition="bottom "+(pose.left!=null?"left":"right");
+    } else if(pose.type==="medal"&&ag){
+      crMed.hidden=false;
+      crMed.style.backgroundImage="url('"+ag+"')";
+      crMed.style.width=(pose.w*ech)+"%"; crMed.style.aspectRatio="1"; crMed.style.top=pose.top+"%";
+      crMed.style.left = pose.left!=null?pose.left+"%":"auto";
+      crMed.style.right= pose.right!=null?pose.right+"%":"auto";
+    }
+
+    cr.dataset.side = P.side || pose.side || "right";
+    cr.dataset.forme = FO.k;
+    cr.style.setProperty("--crVeil",rgba(TE.c,VO.op));
+    cr.style.setProperty("--crVeilLow",rgba(TE.c,VO.op*.62));
+    cr.style.setProperty("--crVeilFull",TE.c);
+    cr.style.setProperty("--crS1",VO.s1); cr.style.setProperty("--crS2",VO.s2);
+    cr.style.setProperty("--crB1",VO.b1); cr.style.setProperty("--crB2",VO.b2);
+    cr.style.setProperty("--crInk",EN.c);
+    cr.style.setProperty("--crInk20",EN.c+"30");
+    cr.style.setProperty("--crAcc",AC.acc);
+
+    let hero="";
+    if(ST.hero){
+      const a=P.ttl[0], b=P.ttl[1], h=b-a;
+      hero='<div class="cr-el cr-hero" style="left:'+P.x+'%;width:'+P.w+'%;top:'+a+'%;height:'+(h*.54)+'%">'
+          + esc((PROFIL.communes[0]||["",""])[1]) + '</div>';
+      P.ttl=[a+h*.58,b];
+    }
+
+    const box=(a,b)=>"left:"+P.x+"%;width:"+P.w+"%;top:"+a+"%;"+(b!=null?"height:"+(b-a)+"%;":"");
+    const ed=S.edit?' contenteditable="true" spellcheck="false"':'';
+    const data=PROFIL.communes.map(c=>
+      '<div class="cr-dl"><span class="cr-dk"'+ed+'>'+esc(c[0])+'</span><span class="cr-dv"'+ed+'>'+esc(c[1])+'</span></div>').join("");
+
+    let btnBox=box(P.btn[0],P.btn[1]);
+    if(PD.large) btnBox="left:0;width:100%;top:"+P.btn[0]+"%;height:"+(P.btn[1]-P.btn[0])+"%;";
+    const btn=PD.cache?"":'<div class="cr-el cr-btn '+PD.cls+'" style="'+btnBox+'"'+ed+'>'+esc(C.btn)+'</div>';
+    const mn =PD.cache?"":'<div class="cr-el cr-mn'+(PD.gauche?" left":"")+'" style="left:'+P.x+'%;width:'+P.w+'%;top:'+P.mn+'%"'+ed+'>'+esc(C.mn)+'</div>';
+
+    crTxt.className="cr-txt"+(S.edit?" edit":"");
+    crTxt.innerHTML= hero+
+      '<div class="cr-el cr-ttl '+ST.cls+'" style="'+box(P.ttl[0],P.ttl[1])+'"'+ed+'>'+esc(C.ttl)+' <em>'+esc(C.acc)+'</em></div>'+
+      '<div class="cr-el cr-rule" style="left:'+P.x+'%;width:9%;top:'+P.rule1+'%"></div>'+
+      '<div class="cr-el cr-sub" style="'+box(P.sub[0],P.sub[1])+'"'+ed+'>'+acce(C.sub)+'</div>'+
+      '<div class="cr-el cr-data" style="'+box(P.data[0],P.data[1])+'">'+data+'</div>'+
+      '<div class="cr-el cr-src" style="'+box(P.src)+'"'+ed+'>'+esc(PROFIL.source)+'</div>'+
+      '<div class="cr-el cr-rule" style="left:'+P.x+'%;width:9%;top:'+P.rule2+'%"></div>'+
+      '<div class="cr-el cr-sig" style="'+box(P.sig[0],P.sig[1])+'"'+ed+'><b>'+esc(nomAgent())+'</b><span>'+esc(fnAgent())+' · '+esc(PROFIL.secteur)+'</span></div>'+
+      btn+mn;
+
+    const B=BAS[S.bas];
+    $("#fbTxt").innerHTML=gras(C.post);
+    $("#fbCtaT").textContent=B.t;
+    $("#fbCtaS").textContent=B.s;
+    $("#fbCtaB").textContent=B.b;
+    $("#fbNm").textContent=nomAgent();
+    $("#lfNm").textContent=nomAgent();
+    const ini=nomAgent().split(/\s+/).map(w=>w[0]).join("").slice(0,2).toUpperCase();
+    [$("#fbAv"),$("#lfAv")].forEach(a=>{
+      if(ag){ a.style.backgroundImage="url('"+ag+"')"; a.textContent=""; }
+      else { a.style.backgroundImage="none"; a.textContent=ini; }
+    });
+
+    /* la note, par ordre d'importance */
+    const n=$("#cfgNote"), r=ratio(AC.acc,"#FFFFFF"), rt=ratio(EN.c,TE.c);
+    if(rt<4.5){
+      n.className="cfgnote warn";
+      n.textContent="Écriture sur voile : "+rt.toFixed(1)+" pour 1. En dessous de 4,5 le texte devient dur à lire sur téléphone.";
+    } else if(!PD.cache && !PD.contour && r<4.5){
+      n.className="cfgnote warn";
+      n.textContent="Blanc sur le bouton : "+r.toFixed(1)+" pour 1, la charte demande 4,5. Passe en contour ou change de couleur.";
+    } else if(!P0.conforme){
+      n.className="cfgnote warn";
+      n.textContent="Placement hors charte validée. Bon pour montrer une variante, à revalider avant diffusion.";
+    } else if(!VO.conforme){
+      n.className="cfgnote";
+      n.textContent="Voile "+VO.nom.toLowerCase()+" : le décor reste visible derrière le texte. Vérifie la lisibilité sur téléphone avant diffusion.";
+    } else {
+      n.className="cfgnote";
+      n.textContent=D.note||"Géométrie conforme à la charte validée.";
+    }
+
+    $("#cfgEdit").classList.toggle("on",S.edit);
+    $("#cfgEdit").textContent=S.edit?"Texte modifiable · actif":"Modifier le texte";
+  }
+
+  function renderAll(){
+    mesurer(imgAgent(), ()=>{ if(!renderAll._b){ renderAll._b=1; renderCreatif(); renderAll._b=0; } });
+    renderDecors(); renderAgents();
+    dots("#cfgAccent",ACCENTS,S.acc,i=>{S.acc=i;renderAll();},o=>o.acc,o=>ratio(o.acc,"#FFFFFF")<4.5);
+    dots("#cfgEncre",ENCRES,S.encre,i=>{S.encre=i;renderAll();},o=>o.c);
+    dots("#cfgTeinte",TEINTES,S.teinte,i=>{S.teinte=i;renderAll();},o=>o.c);
+    chips("#cfgPoses",POSES,S.p,i=>{S.p=i;renderAll();});
+    chips("#cfgTaille",TAILLES,S.taille,i=>{S.taille=i;renderAll();});
+    chips("#cfgVoile",VOILES,S.voile,i=>{S.voile=i;renderAll();});
+    chips("#cfgForme",FORMES,S.forme,i=>{S.forme=i;renderAll();});
+    chips("#cfgPlace",Object.values(PLACEMENTS),Object.keys(PLACEMENTS).indexOf(S.place),
+          i=>{S.place=Object.keys(PLACEMENTS)[i];renderAll();});
+    chips("#cfgCopy",ACCROCHES,S.copy,i=>{S.copy=i;if(S.basAuto&&ACCROCHES[i].bas!=null)S.bas=ACCROCHES[i].bas;renderAll();});
+    chips("#cfgStyle",STYLES,S.style,i=>{S.style=i;renderAll();});
+    chips("#cfgPied",PIEDS,S.pied,i=>{S.pied=i;renderAll();});
+    chips("#cfgBas",BAS,S.bas,i=>{S.bas=i;S.basAuto=false;renderAll();});
+    renderCreatif();
+  }
+
+  /* onglets */
+  document.querySelectorAll(".cfgtab").forEach(t=>{
+    t.onclick=()=>{
+      document.querySelectorAll(".cfgtab").forEach(x=>x.classList.remove("on"));
+      document.querySelectorAll(".cfgpan").forEach(x=>x.classList.remove("on"));
+      t.classList.add("on");
+      $(t.dataset.pan==="img"?"#panImg":"#panTxt").classList.add("on");
+    };
+  });
+  const onglet=k=>{ document.querySelector('.cfgtab[data-pan="'+k+'"]').click(); };
+
+  function lire(f,cb){const r=new FileReader();r.onload=e=>cb(e.target.result);r.readAsDataURL(f);}
+  $("#cfgUpA").onclick=()=>$("#cfgFileA").click();
+  $("#cfgUpD").onclick=()=>$("#cfgFileD").click();
+  $("#cfgFileA").onchange=e=>{const f=e.target.files&&e.target.files[0];if(f)lire(f,d=>{S.upA=d;renderAll();});e.target.value="";};
+  $("#cfgFileD").onchange=e=>{const f=e.target.files&&e.target.files[0];if(f)lire(f,d=>{S.upD[S.d]=d;renderAll();});e.target.value="";};
+  $("#cfgEdit").onclick=()=>{S.edit=!S.edit;renderCreatif();};
+  $("#cfgReset").onclick=()=>{Object.assign(S,DEF,{upD:{}});renderAll();};
+
+  cr.addEventListener("dragover",e=>{e.preventDefault();cr.style.filter="brightness(1.06)";});
+  cr.addEventListener("dragleave",()=>cr.style.filter="");
+  cr.addEventListener("drop",e=>{
+    e.preventDefault();cr.style.filter="";
+    const f=e.dataTransfer.files&&e.dataTransfer.files[0];
+    if(!f||!/^image\//.test(f.type))return;
+    lire(f,d=>{ if(/png|webp/i.test(f.type)) S.upA=d; else S.upD[S.d]=d; renderAll(); });
+  });
+
+  const cyc=(v,n,d)=>(v+(d||1)+n)%n;
+  document.addEventListener("keydown",e=>{
+    const s=$("#s10"); if(!s||!s.classList.contains("on"))return;
+    if(e.target&&(e.target.isContentEditable||/input|textarea|select/i.test(e.target.tagName)))return;
+    if(e.metaKey||e.ctrlKey||e.altKey)return;
+    const k=e.key.toLowerCase();
+    if(k>="1"&&k<="9"){const i=+k-1;if(DECORS[i]){S.d=i;if(DECORS[i].place)S.place=DECORS[i].place;onglet("img");renderAll();e.preventDefault();}return;}
+    if(k==="g"){S.ag=cyc(S.ag,AGENTS.length);S.upA="";onglet("img");renderAll();e.preventDefault();return;}
+    if(k==="a"){S.p=cyc(S.p,POSES.length,-1);onglet("img");renderAll();e.preventDefault();return;}
+    if(k==="z"){S.p=cyc(S.p,POSES.length);onglet("img");renderAll();e.preventDefault();return;}
+    if(k==="t"){S.taille=cyc(S.taille,TAILLES.length);onglet("img");renderAll();e.preventDefault();return;}
+    if(k==="w"){S.voile=cyc(S.voile,VOILES.length);onglet("img");renderAll();e.preventDefault();return;}
+    if(k==="o"){S.forme=cyc(S.forme,FORMES.length);onglet("img");renderAll();e.preventDefault();return;}
+    if(k==="i"){S.encre=cyc(S.encre,ENCRES.length);onglet("txt");renderAll();e.preventDefault();return;}
+    if(k==="u"){S.teinte=cyc(S.teinte,TEINTES.length);onglet("txt");renderAll();e.preventDefault();return;}
+    if(k==="p"){const ks=Object.keys(PLACEMENTS);S.place=ks[cyc(ks.indexOf(S.place),ks.length)];onglet("img");renderAll();e.preventDefault();return;}
+    if(k==="c"){S.copy=cyc(S.copy,ACCROCHES.length);if(S.basAuto&&ACCROCHES[S.copy].bas!=null)S.bas=ACCROCHES[S.copy].bas;onglet("txt");renderAll();e.preventDefault();return;}
+    if(k==="s"){S.style=cyc(S.style,STYLES.length);onglet("txt");renderAll();e.preventDefault();return;}
+    if(k==="x"){S.acc=cyc(S.acc,ACCENTS.length);onglet("txt");renderAll();e.preventDefault();return;}
+    if(k==="v"){S.pied=cyc(S.pied,PIEDS.length);onglet("txt");renderAll();e.preventDefault();return;}
+    if(k==="b"){S.bas=cyc(S.bas,BAS.length);S.basAuto=false;onglet("txt");renderAll();e.preventDefault();return;}
+    if(k==="e"){S.edit=!S.edit;renderCreatif();e.preventDefault();return;}
+  });
+
+  /* ---------- slide 11 ---------- */
+  const F={rep:{}};
+  const nombre=n=>["zéro","une","deux","trois","quatre","cinq","six","sept","huit","neuf","dix","onze","douze"][n]||String(n);
+
+  function renderForm(){
+    const b=$("#lfBody"); b.innerHTML="";
+    FORM.forEach((f,i)=>{
+      const w=el("div","lf-f");
+      const q=el("div","lf-q"); q.appendChild(el("i",null,(i+1)+".")); q.appendChild(el("span",null,esc(f.q)));
+      w.appendChild(q);
+      if(f.type==="saisie"){ w.appendChild(el("div","lf-v",esc(f.val))); F.rep[i]=f.val; }
+      else f.opts.forEach((o,j)=>{
+        const sel=F.rep[i]===o;
+        const s=el("span","lf-o"+(sel?" on":"")+(sel&&(f.ko||[]).includes(j)?" ko":""),esc(o));
+        s.onclick=()=>{F.rep[i]=o;renderForm();};
+        w.appendChild(s);
+      });
+      b.appendChild(w);
+    });
+    $("#lfSub").textContent="Formulaire Meta · "+FORM.length+" question"+(FORM.length>1?"s":"");
+    const nb=nombre(FORM.length);
+    $("#rowQ").textContent=nb.charAt(0).toUpperCase()+nb.slice(1)+" question"+(FORM.length>1?"s":"");
+    $("#rowQs").textContent=FORM.map(f=>f.cle||f.q.toLowerCase()).join(", ");
+    const choix=FORM.filter(f=>f.type==="choix");
+    const faits=choix.filter(f=>F.rep[FORM.indexOf(f)]!=null).length;
+    const bt=$("#lfSend");
+    bt.disabled=faits<choix.length;
+    bt.textContent=bt.disabled?("Répondez aux "+choix.length+" questions ("+faits+"/"+choix.length+")"):"Envoyer";
+  }
+
+  $("#lfSend").onclick=()=>{
+    const ob=$("#lfOutBody"); ob.innerHTML=""; let ko=false;
+    FORM.forEach((f,i)=>{
+      const v=F.rep[i]; if(v==null)return;
+      if(f.type==="choix"&&(f.ko||[]).includes(f.opts.indexOf(v))) ko=true;
+      const r=el("div","lf-or"); r.appendChild(el("b",null,esc(f.fiche||f.q))); r.appendChild(el("span",null,esc(v)));
+      ob.appendChild(r);
+    });
+    const oh=$("#lfOut").querySelector(".lf-oh");
+    oh.style.background=ko?"#8A4318":"var(--forest)";
+    oh.querySelector("b").textContent=ko?"Filtrée avant vous":"Fiche reçue";
+    $("#lfOutSub").textContent=ko?"Cette demande ne vous est pas livrée, et ne vous est pas facturée"
+                                 :"Dans votre espace, en moins d'une minute";
+    $("#lfOut").classList.add("on");
+  };
+  $("#lfBack").onclick=()=>{F.rep={};$("#lfOut").classList.remove("on");renderForm();};
+
+  renderAll(); renderForm();
+})();
+
+function demoGo(n){
+  document.querySelectorAll('.slide').forEach(s=>s.classList.remove('on'));
+  document.getElementById('s'+n).classList.add('on');
+}
+</script>
+</body>
+</html>
